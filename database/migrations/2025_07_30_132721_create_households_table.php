@@ -24,6 +24,7 @@ return new class extends Migration
             $table->boolean('married')->default(false);
             $table->date('marriage_date')->nullable();
             $table->string('marriage_parish')->nullable();
+            $table->string('password')->nullable();
             $table->timestamps();
         });
     }
