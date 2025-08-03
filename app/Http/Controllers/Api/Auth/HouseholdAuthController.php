@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Household;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class HouseholdAuthController extends Controller
@@ -14,15 +15,15 @@ class HouseholdAuthController extends Controller
     {
         $validated = $request->validate([
             'household_name' => 'required|string|max:255',
-            'primary_email' => 'required|email|unique:households,primary_email',
-            'primary_phone' => 'required|string|max:20',
+            'email' => 'required|email|unique:households,email',
+            'phone' => 'required|string|max:20',
             'password' => 'required|string|min:8',
         ]);
 
         $household = Household::create([
             'name' => $validated['household_name'],
-            'phone' => $validated['primary_phone'],
-            'primary_email' => $validated['primary_email'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'],
             'password' => $validated['password'],
         ]);
 
@@ -46,9 +47,26 @@ class HouseholdAuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $household = Household::where('primary_email', $validated['email'])->first();
+        Log::debug('Household login attempt', [
+            'email' => $validated['email'],
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        $household = Household::where('email', $validated['email'])->first();
 
         if (!$household || !$household->validatePassword($validated['password'])) {
+            Log::warning('Household login failed', [
+                'email' => $validated['email'],
+                'ip' => $request->ip(),
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Login failed',
+                'data' => [
+                    'household' => $household
+                ],
+            ]);
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);

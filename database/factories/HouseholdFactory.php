@@ -18,14 +18,14 @@ class HouseholdFactory extends Factory
     {
         static $sequence = 1;
         return [
-            'name' => fake()->lastName() . ' Family ' . $sequence++,
+            'name' => fake()->unique()->lastName() . ' Family ',
             'address' => fake()->streetAddress(),
             'city' => fake()->city(),
             'province' => fake()->state(),
             'postal_code' => fake()->postcode(),
             'phone' => fake()->optional(0.7)->phoneNumber(),
             'mobile' => fake()->optional(0.8)->phoneNumber(),
-            'email' => fake()->optional(0.6)->safeEmail(),
+            'email' => fake()->unique()->safeEmail(),
         ];
     }
 }

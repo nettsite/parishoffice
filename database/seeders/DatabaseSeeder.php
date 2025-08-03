@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Will',
             'email' => 'william@nettsite.co.za',
             'password' => Hash::make('lmf393jq'),
-        ])
-        ->assignRole('Super Admin');
+        ]);
+        // ->assignRole('Super Admin');
     }
 }

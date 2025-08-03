@@ -19,65 +19,13 @@ class HouseholdController extends Controller
         $context['ip'] = request()->ip();
         $context['user_agent'] = request()->userAgent();
         
-        Log::channel('household')->info("[Household] {$action}", $context);
+        Log::debug("[Household] {$action}", $context);
     }
 
-    public function store(Request $request)
+    public function show(Request $request)
     {
-        $this->logActivity('Starting household creation', [
-            'request_data' => $request->except(['password'])
-        ]);
-
-        try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'address' => 'nullable|string|max:255',
-                'city' => 'nullable|string|max:255',
-                'province' => 'nullable|string|max:255',
-                'postal_code' => 'nullable|string|max:20',
-                'phone' => 'nullable|string|max:20',
-                'mobile' => 'nullable|string|max:20',
-                'email' => 'nullable|email|max:255',
-            ]);
-
-            $this->logActivity('Validation passed', [
-                'validated_data' => array_keys($validated)
-            ]);
-
-            $household = Household::create($validated);
-
-        // Create a member as the household head with a token
-        $member = $household->members()->create([
-            'first_name' => explode(' ', $validated['name'])[0] ?? $validated['name'],
-            'last_name' => explode(' ', $validated['name'])[1] ?? '',
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'mobile' => $validated['mobile'],
-        ]);
-
-            // Generate token for the member
-            $token = $member->createToken('household-token')->plainTextToken;
-
-            $this->logActivity('Household created successfully', [
-                'household_id' => $household->id,
-                'member_id' => $member->id
-            ]);
-
-            return response()->json([
-                'household' => $household,
-                'token' => $token,
-            ], 201);
-        } catch (\Exception $e) {
-            $this->logActivity('Household creation failed', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            throw $e;
-        }
-    }
-
-    public function show(Household $household)
-    {
+        $household = $request->user();
+        
         $this->logActivity('Viewing household details', [
             'household_id' => $household->id
         ]);
@@ -94,8 +42,10 @@ class HouseholdController extends Controller
         ]);
     }
 
-    public function update(Request $request, Household $household)
+    public function update(Request $request)
     {
+        $household = $request->user();
+        
         $this->logActivity('Starting household update', [
             'household_id' => $household->id,
             'request_data' => $request->except(['password'])
@@ -137,8 +87,10 @@ class HouseholdController extends Controller
         }
     }
 
-    public function destroy(Household $household)
+    public function destroy(Request $request)
     {
+        $household = $request->user();
+        
         $this->logActivity('Starting household deletion', [
             'household_id' => $household->id
         ]);
@@ -161,8 +113,10 @@ class HouseholdController extends Controller
         }
     }
 
-    public function members(Household $household)
+    public function members(Request $request)
     {
+        $household = $request->user();
+        
         $this->logActivity('Retrieving household members', [
             'household_id' => $household->id
         ]);
