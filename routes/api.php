@@ -22,6 +22,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/household/members', [HouseholdController::class, 'members']);
 
     // Member routes
+    Route::get('/households/{household}/members', [MemberController::class, 'index']);
     Route::post('/household/members', [MemberController::class, 'store']);
     Route::get('/members/{member}', [MemberController::class, 'show']);
     Route::put('/members/{member}', [MemberController::class, 'update']);

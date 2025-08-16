@@ -7,11 +7,33 @@ use App\Models\Household;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class MemberController extends Controller
 {
-    public function store(Request $request, Household $household)
+    public function index(Household $household)
     {
+        $responseData = [
+            'members' => $household->members,
+        ];
+
+        Log::info('Household members retrieved successfully', [
+            'household_id' => $household->id,
+            'members_count' => $household->members->count()
+        ]);
+
+        return response()->json($responseData);
+    }
+
+    public function store(Request $request)
+    {
+        $household = $request->user(); // Get the authenticated household
+        
+        Log::info('Creating member for household', [
+            'household_id' => $household->id,
+            'household_name' => $household->name
+        ]);
+        
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -35,18 +57,38 @@ class MemberController extends Controller
             $validated['password'] = Hash::make($validated['password']);
         }
 
+        // Explicitly set the household_id to ensure it's populated
+        $validated['household_id'] = $household->id;
+
         $member = $household->members()->create($validated);
 
-        return response()->json([
+        // Log the created member to verify household_id is set
+        Log::info('Member created - verifying household_id', [
+            'member_id' => $member->id,
+            'member_name' => $member->first_name . ' ' . $member->last_name,
+            'household_id_in_member' => $member->household_id,
+            'expected_household_id' => $household->id,
+            'household_name' => $household->name
+        ]);
+
+        $responseData = [
             'member' => $member,
-        ], 201);
+        ];
+
+        Log::info('Member created successfully', $responseData);
+
+        return response()->json($responseData, 201);
     }
 
     public function show(Member $member)
     {
-        return response()->json([
+        $responseData = [
             'member' => $member->load('household'),
-        ]);
+        ];
+
+        Log::info('Member retrieved successfully', $responseData);
+
+        return response()->json($responseData);
     }
 
     public function update(Request $request, Member $member)
@@ -76,13 +118,19 @@ class MemberController extends Controller
 
         $member->update($validated);
 
-        return response()->json([
+        $responseData = [
             'member' => $member,
-        ]);
+        ];
+
+        Log::info('Member updated successfully', $responseData);
+
+        return response()->json($responseData);
     }
 
     public function destroy(Member $member)
     {
+        Log::info('Member deleted successfully', ['member_id' => $member->id]);
+        
         $member->delete();
         return response()->noContent();
     }

@@ -8,6 +8,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string|null $address
+ * @property string|null $city
+ * @property string|null $province
+ * @property string|null $postal_code
+ * @property string|null $phone
+ * @property string|null $mobile
+ * @property string|null $email
+ * @property string|null $primary_email
+ * @property string $password
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Member> $members
+ */
 class Household extends Model
 {
     /** @use HasFactory<\Database\Factories\HouseholdFactory> */
