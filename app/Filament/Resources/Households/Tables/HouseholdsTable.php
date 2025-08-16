@@ -19,12 +19,16 @@ class HouseholdsTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('address')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('city')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('province')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('postal_code')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('phone')
                     ->searchable(),
@@ -32,13 +36,17 @@ class HouseholdsTable
                     ->searchable(),
                 TextColumn::make('email')
                     ->label('Email address')
-                    ->searchable(),
+                    ->searchable()
+                    ->url(fn ($record) => $record->email ? 'mailto:' . $record->email : null)
+                    ->openUrlInNewTab(true),
                 IconColumn::make('married')
                     ->boolean(),
                 TextColumn::make('marriage_date')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->date()
                     ->sortable(),
                 TextColumn::make('marriage_parish')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

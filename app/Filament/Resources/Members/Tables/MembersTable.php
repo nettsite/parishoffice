@@ -21,6 +21,7 @@ class MembersTable
                 TextColumn::make('last_name')
                     ->searchable(),
                 TextColumn::make('household.name')
+                    ->toggleable()
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('email')
@@ -33,23 +34,29 @@ class MembersTable
                 IconColumn::make('baptised')
                     ->boolean(),
                 TextColumn::make('baptism_date')
+                    ->toggleable()
                     ->date()
                     ->sortable(),
                 TextColumn::make('baptism_parish')
+                    ->toggleable()
                     ->searchable(),
                 IconColumn::make('first_communion')
                     ->boolean(),
                 TextColumn::make('first_communion_date')
+                    ->toggleable()
                     ->date()
                     ->sortable(),
                 TextColumn::make('first_communion_parish')
+                    ->toggleable()
                     ->searchable(),
                 IconColumn::make('confirmed')
                     ->boolean(),
                 TextColumn::make('confirmation_date')
+                    ->toggleable()
                     ->date()
                     ->sortable(),
                 TextColumn::make('confirmation_parish')
+                    ->toggleable()
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

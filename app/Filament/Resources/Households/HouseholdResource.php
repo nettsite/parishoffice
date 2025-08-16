@@ -6,6 +6,7 @@ use App\Filament\Resources\Households\Pages\CreateHousehold;
 use App\Filament\Resources\Households\Pages\EditHousehold;
 use App\Filament\Resources\Households\Pages\ListHouseholds;
 use App\Filament\Resources\Households\Pages\ViewHousehold;
+use App\Filament\Resources\Households\RelationManagers\MembersRelationManager;
 use App\Filament\Resources\Households\Schemas\HouseholdForm;
 use App\Filament\Resources\Households\Schemas\HouseholdInfolist;
 use App\Filament\Resources\Households\Tables\HouseholdsTable;
@@ -40,7 +41,7 @@ class HouseholdResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            MembersRelationManager::class,
         ];
     }
 
