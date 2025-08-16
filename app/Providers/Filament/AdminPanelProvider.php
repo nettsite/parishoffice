@@ -29,9 +29,15 @@ class AdminPanelProvider extends PanelProvider
             ->path('')
             ->domain(config('matthew.domain', 'http://localhost'))
             ->login()
+            ->passwordReset()
+
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
+            ->maxContentWidth('full')
+            ->sidebarCollapsibleOnDesktop()
+            ->topNavigation()
+
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
