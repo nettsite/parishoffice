@@ -74,8 +74,8 @@ class MembersTable
                     ->label('Baptism Status')
                     ->options([
                         'all' => 'All Members',
-                        'baptised' => 'Baptised Members',
-                        'not_baptised' => 'Not Baptised Members',
+                        'baptised' => 'Baptised',
+                        'not_baptised' => 'Not Baptised',
                     ])
                     ->default('all')
                     ->query(function (Builder $query, array $data): Builder {
@@ -104,8 +104,8 @@ class MembersTable
                     ->label('Confirmation Status')
                     ->options([
                         'all' => 'All Members',
-                        'confirmed' => 'Confirmed Members',
-                        'not_confirmed' => 'Not Confirmed Members',
+                        'confirmed' => 'Confirmed',
+                        'not_confirmed' => 'Not Confirmed',
                     ])
                     ->default('all')
                     ->query(function (Builder $query, array $data): Builder {
