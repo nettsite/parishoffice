@@ -8,7 +8,9 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class MembersTable
 {
@@ -68,7 +70,51 @@ class MembersTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('baptised')
+                    ->label('Baptism Status')
+                    ->options([
+                        'all' => 'All Members',
+                        'baptised' => 'Baptised Members',
+                        'not_baptised' => 'Not Baptised Members',
+                    ])
+                    ->default('all')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return match ($data['value'] ?? 'all') {
+                            'baptised' => $query->where('baptised', true),
+                            'not_baptised' => $query->where('baptised', false),
+                            default => $query,
+                        };
+                    }),
+                SelectFilter::make('first_communion')
+                    ->label('First Communion Status')
+                    ->options([
+                        'all' => 'All Members',
+                        'first_communion' => 'First Communion Received',
+                        'not_first_communion' => 'First Communion Not Received',
+                    ])
+                    ->default('all')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return match ($data['value'] ?? 'all') {
+                            'first_communion' => $query->where('first_communion', true),
+                            'not_first_communion' => $query->where('first_communion', false),
+                            default => $query,
+                        };
+                    }),
+                SelectFilter::make('confirmed')
+                    ->label('Confirmation Status')
+                    ->options([
+                        'all' => 'All Members',
+                        'confirmed' => 'Confirmed Members',
+                        'not_confirmed' => 'Not Confirmed Members',
+                    ])
+                    ->default('all')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return match ($data['value'] ?? 'all') {
+                            'confirmed' => $query->where('confirmed', true),
+                            'not_confirmed' => $query->where('confirmed', false),
+                            default => $query,
+                        };
+                    }),
             ])
             ->recordActions([
                 ViewAction::make(),
