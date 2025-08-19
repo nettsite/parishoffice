@@ -1,4 +1,4 @@
-# Matthew Parish Management System
+# ParishOffice
 
 A comprehensive Laravel-based parish management system designed to help parishes efficiently manage their members, households, and ministries.
 
