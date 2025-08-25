@@ -50,6 +50,12 @@ class MemberForm
                 TextInput::make('password')
                     ->password()
                     ->default(null),
+                TextInput::make('occupation')
+                    ->label('Occupation')
+                    ->default(null),
+                TextInput::make('skills')
+                    ->label('Skills')
+                    ->default(null),
                 Toggle::make('baptised')
                     ->required(),
                 DatePicker::make('baptism_date'),
