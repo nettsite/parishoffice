@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aab05bdc6643c3c39cd3c5c70cfe4f44",
+    "content-hash": "9732cce15f3fefc90eee36cf5d168dbd",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -1362,6 +1362,43 @@
                 "source": "https://github.com/filamentphp/filament"
             },
             "time": "2025-08-15T11:43:56+00:00"
+        },
+        {
+            "name": "filament/spatie-laravel-media-library-plugin",
+            "version": "v4.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/filamentphp/spatie-laravel-media-library-plugin.git",
+                "reference": "2b2701759acb4c7d6e55c136233af1cf2520d5c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/spatie-laravel-media-library-plugin/zipball/2b2701759acb4c7d6e55c136233af1cf2520d5c6",
+                "reference": "2b2701759acb4c7d6e55c136233af1cf2520d5c6",
+                "shasum": ""
+            },
+            "require": {
+                "filament/support": "self.version",
+                "php": "^8.2",
+                "spatie/laravel-medialibrary": "^11.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Filament\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Filament support for `spatie/laravel-medialibrary`.",
+            "homepage": "https://github.com/filamentphp/filament",
+            "support": {
+                "issues": "https://github.com/filamentphp/filament/issues",
+                "source": "https://github.com/filamentphp/filament"
+            },
+            "time": "2025-08-15T11:43:57+00:00"
         },
         {
             "name": "filament/support",
@@ -5633,16 +5670,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "11.13.0",
+            "version": "11.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "e2324b2f138ec41181089a7dcf28489be93ede53"
+                "reference": "7050a0d041be8c5c5ef5886967fbbbe578a54296"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/e2324b2f138ec41181089a7dcf28489be93ede53",
-                "reference": "e2324b2f138ec41181089a7dcf28489be93ede53",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/7050a0d041be8c5c5ef5886967fbbbe578a54296",
+                "reference": "7050a0d041be8c5c5ef5886967fbbbe578a54296",
                 "shasum": ""
             },
             "require": {
@@ -5726,7 +5763,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-medialibrary/issues",
-                "source": "https://github.com/spatie/laravel-medialibrary/tree/11.13.0"
+                "source": "https://github.com/spatie/laravel-medialibrary/tree/11.14.0"
             },
             "funding": [
                 {
@@ -5738,7 +5775,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-22T12:25:27+00:00"
+            "time": "2025-08-19T08:01:56+00:00"
         },
         {
             "name": "spatie/laravel-package-tools",
