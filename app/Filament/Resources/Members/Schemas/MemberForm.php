@@ -22,6 +22,41 @@ class MemberForm
                             ->required(),
                         TextInput::make('last_name')
                             ->required(),
+                        TextInput::make('id_number')
+                            ->label('ID Number')
+                            ->unique(ignoreRecord: true)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, $set) {
+                                if (empty($state) || strlen($state) < 6) {
+                                    return;
+                                }
+
+                                // Extract first 6 digits for South African ID format (YYMMDD)
+                                $datePart = substr($state, 0, 6);
+
+                                // Validate that it's all digits
+                                if (! ctype_digit($datePart)) {
+                                    return;
+                                }
+
+                                $year = substr($datePart, 0, 2);
+                                $month = substr($datePart, 2, 2);
+                                $day = substr($datePart, 4, 2);
+
+                                // Determine century (assume 00-25 is 2000s, 26-99 is 1900s)
+                                $fullYear = (int) $year <= 25 ? '20'.$year : '19'.$year;
+
+                                // Validate the date
+                                if (checkdate((int) $month, (int) $day, (int) $fullYear)) {
+                                    $dateOfBirth = $fullYear.'-'.$month.'-'.$day;
+                                    $set('date_of_birth', $dateOfBirth);
+                                }
+                            })
+                            ->default(null),
+                        DatePicker::make('date_of_birth')
+                            ->label('Date of Birth')
+                            ->maxDate(now())
+                            ->default(null),
                         Select::make('household_id')
                             ->label('Household')
                             ->required()
@@ -50,7 +85,7 @@ class MemberForm
                             ->default(null),
                         TextInput::make('mobile')
                             ->default(null),
-                        
+
                         // TODO: maybe allow members to log in sometime
                         // TextInput::make('password')
                         //     ->password()
@@ -62,7 +97,7 @@ class MemberForm
                         //     ->revealable()
                         //     ->same('password')
                         //     ->default(null),
-                        
+
                         TextInput::make('occupation')
                             ->label('Occupation')
                             ->default(null),
@@ -84,7 +119,7 @@ class MemberForm
                             ->collection('baptism_certificates')
                             ->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
                             ->maxSize(10240) // 10MB
-                            ->enableOpen()
+                            ->openable()
                             ->previewable(false)
                             ->panelLayout('compact'),
                     ])
@@ -102,7 +137,7 @@ class MemberForm
                             ->collection('first_communion_certificates')
                             ->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
                             ->maxSize(10240) // 10MB
-                            ->enableOpen()
+                            ->openable()
                             ->previewable(false)
                             ->panelLayout('compact'),
                     ])
@@ -120,7 +155,7 @@ class MemberForm
                             ->collection('confirmation_certificates')
                             ->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
                             ->maxSize(10240) // 10MB
-                            ->enableOpen()
+                            ->openable()
                             ->previewable(false)
                             ->panelLayout('compact'),
                     ])

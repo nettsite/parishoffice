@@ -21,6 +21,8 @@ class MemberFactory extends Factory
             'household_id' => Household::factory(),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
+            'id_number' => fake()->optional(0.6)->unique()->numerify('########'), // 60% chance, 8 digit number
+            'date_of_birth' => fake()->optional(0.8)->date('Y-m-d', '-18 years'), // 80% chance, at least 18 years old
             'email' => fake()->optional(0.7)->safeEmail(),
             'phone' => fake()->optional(0.5)->phoneNumber(),
             'mobile' => fake()->optional(0.8)->phoneNumber(),

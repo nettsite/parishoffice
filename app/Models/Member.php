@@ -13,6 +13,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $id
  * @property string $first_name
  * @property string $last_name
+ * @property string|null $id_number
+ * @property \Carbon\Carbon|null $date_of_birth
  * @property string|null $email
  * @property string|null $phone
  * @property string|null $mobile
@@ -50,6 +52,7 @@ class Member extends Model implements HasMedia
         'baptism_date' => 'date',
         'first_communion_date' => 'date',
         'confirmation_date' => 'date',
+        'date_of_birth' => 'date',
     ];
 
     public function household()
