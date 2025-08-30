@@ -65,17 +65,17 @@ class Member extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('baptism_certificates')
-            ->acceptsMimeTypes(['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
+            ->acceptsMimeTypes(['application/pdf', 'application/octet-stream', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
             ->singleFile()
             ->useDisk('public');
 
         $this->addMediaCollection('first_communion_certificates')
-            ->acceptsMimeTypes(['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
+            ->acceptsMimeTypes(['application/pdf', 'application/octet-stream', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
             ->singleFile()
             ->useDisk('public');
 
         $this->addMediaCollection('confirmation_certificates')
-            ->acceptsMimeTypes(['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
+            ->acceptsMimeTypes(['application/pdf', 'application/octet-stream', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
             ->singleFile()
             ->useDisk('public');
     }

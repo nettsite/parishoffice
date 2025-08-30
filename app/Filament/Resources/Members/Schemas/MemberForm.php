@@ -50,9 +50,19 @@ class MemberForm
                             ->default(null),
                         TextInput::make('mobile')
                             ->default(null),
-                        TextInput::make('password')
-                            ->password()
-                            ->default(null),
+                        
+                        // TODO: maybe allow members to log in sometime
+                        // TextInput::make('password')
+                        //     ->password()
+                        //     ->revealable()
+                        //     ->default(null),
+                        // TextInput::make('password_confirmation')
+                        //     ->label('Confirm Password')
+                        //     ->password()
+                        //     ->revealable()
+                        //     ->same('password')
+                        //     ->default(null),
+                        
                         TextInput::make('occupation')
                             ->label('Occupation')
                             ->default(null),

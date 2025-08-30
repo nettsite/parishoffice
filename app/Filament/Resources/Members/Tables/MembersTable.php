@@ -23,42 +23,45 @@ class MembersTable
                 TextColumn::make('last_name')
                     ->searchable(),
                 TextColumn::make('household.name')
-                    ->toggleable()
-                    ->numeric()
                     ->sortable(),
                 TextColumn::make('email')
+                    ->toggleable()
                     ->label('Email address')
-                    ->searchable(),
+                    ->searchable()
+                    ->url(fn ($record) => $record->email ? 'mailto:' . $record->email : null)
+                    ->openUrlInNewTab(true),
                 TextColumn::make('phone')
+                    ->toggleable()
                     ->searchable(),
                 TextColumn::make('mobile')
+                    ->toggleable()
                     ->searchable(),
                 IconColumn::make('baptised')
                     ->boolean(),
                 TextColumn::make('baptism_date')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->date()
                     ->sortable(),
                 TextColumn::make('baptism_parish')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 IconColumn::make('first_communion')
                     ->boolean(),
                 TextColumn::make('first_communion_date')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->date()
                     ->sortable(),
                 TextColumn::make('first_communion_parish')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 IconColumn::make('confirmed')
                     ->boolean(),
                 TextColumn::make('confirmation_date')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->date()
                     ->sortable(),
                 TextColumn::make('confirmation_parish')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
