@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Members\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -26,16 +27,26 @@ class MemberForm
                             ->label('ID Number')
                             ->unique(ignoreRecord: true)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function ($state, $set) {
+                            ->afterStateUpdated(function ($state, $set, $get) {
                                 if (empty($state) || strlen($state) < 6) {
                                     return;
                                 }
+
+                                // Don't process if date_of_birth is already populated
+                                if (! empty($get('date_of_birth'))) {
+                                    return;
+                                }
+
+                                // Set loading state
+                                $set('date_of_birth_loading', true);
 
                                 // Extract first 6 digits for South African ID format (YYMMDD)
                                 $datePart = substr($state, 0, 6);
 
                                 // Validate that it's all digits
                                 if (! ctype_digit($datePart)) {
+                                    $set('date_of_birth_loading', false);
+
                                     return;
                                 }
 
@@ -51,12 +62,20 @@ class MemberForm
                                     $dateOfBirth = $fullYear.'-'.$month.'-'.$day;
                                     $set('date_of_birth', $dateOfBirth);
                                 }
+
+                                // Remove loading state
+                                $set('date_of_birth_loading', false);
                             })
                             ->default(null),
                         DatePicker::make('date_of_birth')
                             ->label('Date of Birth')
                             ->maxDate(now())
+                            ->disabled(fn ($get) => $get('date_of_birth_loading'))
+                            ->helperText(fn ($get) => $get('date_of_birth_loading') ? 'Processing ID number...' : null)
                             ->default(null),
+                        Hidden::make('date_of_birth_loading')
+                            ->default(false)
+                            ->dehydrated(false),
                         Select::make('household_id')
                             ->label('Household')
                             ->required()
