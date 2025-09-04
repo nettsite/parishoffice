@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Households\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
@@ -37,6 +38,11 @@ class HouseholdForm
                 DatePicker::make('marriage_date'),
                 TextInput::make('marriage_parish')
                     ->default(null),
+                DateTimePicker::make('terms_accepted')
+                    ->label('Terms & Conditions Accepted')
+                    ->readOnly()
+                    ->displayFormat('Y-m-d H:i:s')
+                    ->placeholder('Terms not yet accepted'),
             ]);
     }
 }

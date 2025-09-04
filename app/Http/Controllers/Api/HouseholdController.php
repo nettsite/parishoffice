@@ -61,12 +61,25 @@ class HouseholdController extends Controller
                 'phone' => 'nullable|string|max:20',
                 'mobile' => 'nullable|string|max:20',
                 'email' => 'nullable|email|max:255',
+                'terms_accepted' => 'required|in:1',
             ]);
 
             $this->logActivity('Update validation passed', [
                 'household_id' => $household->id,
                 'fields_to_update' => array_keys($validated)
             ]);
+
+            // Handle terms acceptance
+            if (isset($validated['terms_accepted']) && $validated['terms_accepted']) {
+                $validated['terms_accepted'] = now();
+                $this->logActivity('Terms accepted', [
+                    'household_id' => $household->id,
+                    'terms_accepted_at' => $validated['terms_accepted']
+                ]);
+            } else {
+                // Remove from validated array if not accepted (don't update the field)
+                unset($validated['terms_accepted']);
+            }
 
             $household->update($validated);
 

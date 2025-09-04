@@ -20,6 +20,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $email
  * @property string|null $primary_email
  * @property string $password
+ * @property \Carbon\Carbon|null $terms_accepted
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Member> $members
@@ -46,6 +47,11 @@ class Household extends Model
         'email',
         'primary_email',
         'password',
+        'terms_accepted',
+    ];
+
+    protected $casts = [
+        'terms_accepted' => 'datetime',
     ];
 
     public function members()

@@ -48,6 +48,11 @@ class HouseholdsTable
                 TextColumn::make('marriage_parish')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
+                TextColumn::make('terms_accepted')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->placeholder('Not accepted'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
