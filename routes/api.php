@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 // Authentication routes (no auth required)
 Route::post('/household/register', [HouseholdAuthController::class, 'register']);
 Route::post('/household/login', [HouseholdAuthController::class, 'login']);
+Route::post('/household/forgot-password', [HouseholdAuthController::class, 'forgotPassword']);
+Route::post('/household/reset-password', [HouseholdAuthController::class, 'resetPassword']);
 
 // Protected routes
 Route::middleware(['auth:sanctum'])->group(function () {

@@ -62,6 +62,7 @@ class HouseholdsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->reorderableColumns()
             ->filters([
                 //
             ])

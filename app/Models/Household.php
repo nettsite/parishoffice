@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\HouseholdResetPassword;
 
 /**
  * @property int $id
@@ -25,10 +29,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @property \Carbon\Carbon $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Member> $members
  */
-class Household extends Model
+class Household extends Model implements CanResetPassword
 {
     /** @use HasFactory<\Database\Factories\HouseholdFactory> */
-    use HasFactory, HasApiTokens;
+    use HasFactory, HasApiTokens, Notifiable;
 
     protected $guarded = ['password'];
 
@@ -69,5 +73,15 @@ class Household extends Model
     public function validatePassword(string $password): bool
     {
         return Hash::check($password, $this->password);
+    }
+
+    public function getEmailForPasswordReset()
+    {
+        return $this->email;
+    }
+
+    public function sendPasswordResetNotification($token, $resetUrl = null)
+    {
+        $this->notify(new HouseholdResetPassword($token, $resetUrl));
     }
 }
