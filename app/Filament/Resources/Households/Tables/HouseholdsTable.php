@@ -18,6 +18,7 @@ class HouseholdsTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
+
                 TextColumn::make('address')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
@@ -37,10 +38,16 @@ class HouseholdsTable
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable()
-                    ->url(fn ($record) => $record->email ? 'mailto:' . $record->email : null)
+                    ->url(fn($record) => $record->email ? 'mailto:' . $record->email : null)
                     ->openUrlInNewTab(true),
                 IconColumn::make('married')
-                    ->boolean(),
+                    ->boolean(),    
+                TextColumn::make('members_count')
+                    ->label('Members')
+                    ->counts('members')
+                    ->alignRight()
+                    ->sortable(),
+                
                 TextColumn::make('marriage_date')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->date()
