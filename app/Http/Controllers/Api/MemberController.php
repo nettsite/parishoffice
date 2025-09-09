@@ -102,7 +102,7 @@ class MemberController extends Controller
             'last_name' => 'required|string|max:255',
             'id_number' => 'nullable|string|max:13',
             'date_of_birth' => 'nullable|date',
-            'email' => 'nullable|email|max:255',
+            'email' => 'nullable|email|max:255|unique:members,email,' . $member->id,
             'phone' => 'nullable|string|max:20',
             'mobile' => 'nullable|string|max:20',
             'password' => 'nullable|string|min:8',
@@ -117,6 +117,8 @@ class MemberController extends Controller
             'confirmed' => 'required|boolean',
             'confirmation_date' => 'nullable|date',
             'confirmation_parish' => 'nullable|string|max:255',
+        ], [
+            'email.unique' => 'This email address is in use. Leave blank if you share an email.',
         ]);
 
         // Hash password if provided
