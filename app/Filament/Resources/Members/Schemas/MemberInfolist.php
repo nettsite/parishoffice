@@ -49,7 +49,8 @@ class MemberInfolist
                             })
                             ->openUrlInNewTab(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->visible(fn($record) => auth()->user()->hasPermissionForMember('member.view.sacramental', $record)),
 
                 Section::make('First Communion')
                     ->schema([
@@ -72,7 +73,8 @@ class MemberInfolist
                             })
                             ->openUrlInNewTab(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->visible(fn($record) => auth()->user()->hasPermissionForMember('member.view.sacramental', $record)),
 
                 Section::make('Confirmation')
                     ->schema([
@@ -95,7 +97,8 @@ class MemberInfolist
                             })
                             ->openUrlInNewTab(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->visible(fn($record) => auth()->user()->hasPermissionForMember('member.view.sacramental', $record)),
 
                 Section::make('Timestamps')
                     ->schema([

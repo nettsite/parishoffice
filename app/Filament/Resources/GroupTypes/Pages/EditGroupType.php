@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\Users\Pages;
+namespace App\Filament\Resources\GroupTypes\Pages;
 
-use App\Filament\Resources\Users\UserResource;
+use App\Filament\Resources\GroupTypes\GroupTypeResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditUser extends EditRecord
+class EditGroupType extends EditRecord
 {
-    protected static string $resource = UserResource::class;
+    protected static string $resource = GroupTypeResource::class;
 
     protected function getHeaderActions(): array
     {

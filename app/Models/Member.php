@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -33,6 +35,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \Carbon\Carbon $updated_at
  * @property-read string $full_name
  * @property-read Household $household
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Group> $groups
  */
 class Member extends Model implements HasMedia
 {
@@ -55,9 +58,16 @@ class Member extends Model implements HasMedia
         'date_of_birth' => 'date',
     ];
 
-    public function household()
+    public function household(): BelongsTo
     {
         return $this->belongsTo(Household::class);
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class, 'group_member')
+                    ->withPivot(['joined_at', 'is_active'])
+                    ->withTimestamps();
     }
 
     public function getFullNameAttribute(): string

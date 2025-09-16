@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\Members;
+namespace App\Filament\Resources\Groups;
 
-use App\Filament\Resources\Members\Pages\CreateMember;
-use App\Filament\Resources\Members\Pages\EditMember;
-use App\Filament\Resources\Members\Pages\ListMembers;
-use App\Filament\Resources\Members\Pages\ViewMember;
-use App\Filament\Resources\Members\Schemas\MemberForm;
-use App\Filament\Resources\Members\Schemas\MemberInfolist;
-use App\Filament\Resources\Members\Tables\MembersTable;
-use App\Models\Member;
+use App\Filament\Resources\Groups\Pages\CreateGroup;
+use App\Filament\Resources\Groups\Pages\EditGroup;
+use App\Filament\Resources\Groups\Pages\ListGroups;
+use App\Filament\Resources\Groups\Schemas\GroupForm;
+use App\Filament\Resources\Groups\Tables\GroupsTable;
+use App\Models\Group;
 use BackedEnum;
 use UnitEnum;
 use Filament\Resources\Resource;
@@ -18,9 +16,9 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class MemberResource extends Resource
+class GroupResource extends Resource
 {
-    protected static ?string $model = Member::class;
+    protected static ?string $model = Group::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -45,24 +43,19 @@ class MemberResource extends Resource
             return $query;
         }
 
-        return $query->whereHas('groups.leaders', function ($q) use ($user) {
+        return $query->whereHas('leaders', function ($q) use ($user) {
             $q->where('user_id', $user->id);
         });
     }
 
     public static function form(Schema $schema): Schema
     {
-        return MemberForm::configure($schema);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return MemberInfolist::configure($schema);
+        return GroupForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return MembersTable::configure($table);
+        return GroupsTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -75,10 +68,9 @@ class MemberResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListMembers::route('/'),
-            'create' => CreateMember::route('/create'),
-            'view' => ViewMember::route('/{record}'),
-            'edit' => EditMember::route('/{record}/edit'),
+            'index' => ListGroups::route('/'),
+            'create' => CreateGroup::route('/create'),
+            'edit' => EditGroup::route('/{record}/edit'),
         ];
     }
 }
