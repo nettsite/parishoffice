@@ -4,16 +4,15 @@ namespace App\Policies;
 
 use App\Models\Member;
 use App\Models\User;
-use App\Models\Household;
 
-class HouseholdPolicy
+class UserPolicy
 {
     public function viewAny(User|Member $authenticatedUser): bool
     {
         return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
     }
 
-    public function view(User|Member $authenticatedUser, Household $household): bool
+    public function view(User|Member $authenticatedUser, User $user): bool
     {
         return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
     }
@@ -23,27 +22,22 @@ class HouseholdPolicy
         return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
     }
 
-    public function update(User|Member $authenticatedUser, Household $household): bool
+    public function update(User|Member $authenticatedUser, User $user): bool
     {
         return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
     }
 
-    public function delete(User|Member $authenticatedUser, Household $household): bool
+    public function delete(User|Member $authenticatedUser, User $user): bool
     {
         return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
     }
 
-    public function restore(User|Member $authenticatedUser, Household $household): bool
+    public function restore(User|Member $authenticatedUser, User $user): bool
     {
         return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
     }
 
-    public function forceDelete(User|Member $authenticatedUser, Household $household): bool
-    {
-        return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
-    }
-
-    public function manageMember(User|Member $authenticatedUser, Household $household): bool
+    public function forceDelete(User|Member $authenticatedUser, User $user): bool
     {
         return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
     }

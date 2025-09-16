@@ -7,27 +7,38 @@ use App\Models\User;
 
 class MemberPolicy
 {
+    public function viewAny(User|Member $authenticatedUser): bool
+    {
+        return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
+    }
+
     public function view(User|Member $authenticatedUser, Member $member): bool
     {
-        if ($authenticatedUser instanceof User) {
-            return true; // Admin users can view all members
-        }
-        return $authenticatedUser->household_id === $member->household_id;
+        return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
+    }
+
+    public function create(User|Member $authenticatedUser): bool
+    {
+        return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
     }
 
     public function update(User|Member $authenticatedUser, Member $member): bool
     {
-        if ($authenticatedUser instanceof User) {
-            return true; // Admin users can update all members
-        }
-        return $authenticatedUser->household_id === $member->household_id;
+        return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
     }
 
     public function delete(User|Member $authenticatedUser, Member $member): bool
     {
-        if ($authenticatedUser instanceof User) {
-            return true; // Admin users can delete all members
-        }
-        return $authenticatedUser->household_id === $member->household_id;
+        return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
+    }
+
+    public function restore(User|Member $authenticatedUser, Member $member): bool
+    {
+        return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
+    }
+
+    public function forceDelete(User|Member $authenticatedUser, Member $member): bool
+    {
+        return $authenticatedUser instanceof User && $authenticatedUser->hasRole('Administrator');
     }
 }

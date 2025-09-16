@@ -36,10 +36,10 @@ class PermissionSeeder extends Seeder
         $role = Role::create(['name' => 'Catechist'])
             ->givePermissionTo(['manage-catechism-group']);
         
-            $role = Role::create(['name' => 'Household Head'])
+            $role = Role::create(['name' => 'Householder'])
             ->givePermissionTo(['manage-household']);
 
-        $role = Role::create(['name' => 'Super Admin']);
+        $role = Role::create(['name' => 'Administrator']);
         $role->givePermissionTo(Permission::all());
     }
 }

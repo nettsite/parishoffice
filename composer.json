@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.10.1",
         "opcodesio/log-viewer": "^3.19",
         "spatie/laravel-medialibrary": "^11.14",
-        "spatie/laravel-permission": "^6.21"
+        "spatie/laravel-permission": "^6.21",
+        "stechstudio/filament-impersonate": "^4.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.6",
