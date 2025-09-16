@@ -105,33 +105,6 @@ routes/
 └── web.php           # Web routes (minimal, mainly for admin)
 ```
 
-## Development Conventions
-
-### Laravel/PHP Standards
-- Follow Laravel 12.x conventions and PSR-12 coding standards
-- Use PHP 8 constructor property promotion: `public function __construct(public GitHub $github) {}`
-- Always use explicit return type declarations for methods
-- Use Eloquent relationships with proper return type hints
-- Create Form Request classes for validation rather than inline validation
-
-### Filament Conventions
-- Use `php artisan make:filament-*` commands for creating Filament components
-- Follow existing patterns in `app/Filament/Resources/` for CRUD interfaces
-- Use static `make()` methods for component initialization
-- Leverage `relationship()` method for form selects when working with Eloquent relationships
-
-### Database Conventions
-- Use snake_case for database columns and field names
-- Use PascalCase for model and controller names
-- Always create factories and seeders for new models
-- Use `php artisan make:model Name -m` to create model with migration
-
-### Testing Conventions
-- Write Feature tests for API endpoints and user workflows
-- Write Unit tests for complex business logic
-- Use model factories for test data setup
-- Tests use in-memory SQLite database for speed
-
 ## Authentication & Security
 
 ### Household API Authentication
@@ -160,24 +133,6 @@ routes/
 - Advanced reporting and analytics
 - Multi-parish support
 
-## Common Development Tasks
-
-### Creating New API Endpoints
-1. Add route to `routes/api.php` within appropriate middleware group
-2. Create controller in `app/Http/Controllers/Api/`
-3. Create Form Request for validation in `app/Http/Requests/`
-4. Write Feature tests in `tests/Feature/Api/`
-
-### Adding Filament Admin Features
-1. Use `php artisan make:filament-resource ModelName` to create admin interface
-2. Customize in `app/Filament/Resources/ModelNameResource.php`
-3. Follow existing patterns for forms, tables, and actions
-
-### Database Schema Changes
-1. Create migration: `php artisan make:migration descriptive_name`
-2. Update model with any new relationships or casts
-3. Update model factory if needed for testing
-4. Run migration: `php artisan migrate`
 
 ## Single Test Execution
 
