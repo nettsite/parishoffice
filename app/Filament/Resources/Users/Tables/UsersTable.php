@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 use STS\FilamentImpersonate\Actions\Impersonate;
 
 class UsersTable
@@ -38,7 +40,11 @@ class UsersTable
             ->recordActions([
                 EditAction::make(),
                 Impersonate::make()
-                    ->visible(fn () => auth()->user()->hasRole('Administrator')),
+                    ->visible(function () {
+                        /** @var User $user */
+                        $user = Auth::user();
+                        return $user->hasRole('Administrator');
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
