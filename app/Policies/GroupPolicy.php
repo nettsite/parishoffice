@@ -9,36 +9,46 @@ class GroupPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasRole(['Administrator', 'Group Leader', 'Catechist']);
+        return $user->can('group.view-any');
     }
 
     public function view(User $user, Group $group): bool
     {
-        return $user->hasRole('Administrator') || $user->canAccessGroup($group);
+        if ($user->can('group.view')) {
+            return true;
+        }
+
+        // Check if user can access this specific group through group leadership
+        return $user->canAccessGroup($group);
     }
 
     public function create(User $user): bool
     {
-        return $user->hasRole('Administrator');
+        return $user->can('group.create');
     }
 
     public function update(User $user, Group $group): bool
     {
-        return $user->hasRole('Administrator') || $user->canAccessGroup($group);
+        if ($user->can('group.update')) {
+            return true;
+        }
+
+        // Check if user can access this specific group through group leadership
+        return $user->canAccessGroup($group);
     }
 
     public function delete(User $user, Group $group): bool
     {
-        return $user->hasRole('Administrator');
+        return $user->can('group.delete');
     }
 
     public function restore(User $user, Group $group): bool
     {
-        return $user->hasRole('Administrator');
+        return $user->can('group.restore');
     }
 
     public function forceDelete(User $user, Group $group): bool
     {
-        return $user->hasRole('Administrator');
+        return $user->can('group.force-delete');
     }
 }
