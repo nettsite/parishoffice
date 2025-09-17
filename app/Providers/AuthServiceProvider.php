@@ -2,10 +2,18 @@
 
 namespace App\Providers;
 
+use App\Models\Group;
+use App\Models\GroupType;
 use App\Models\Household;
 use App\Models\Member;
+use App\Models\User;
+use App\Policies\GroupPolicy;
+use App\Policies\GroupTypePolicy;
 use App\Policies\HouseholdPolicy;
 use App\Policies\MemberPolicy;
+use App\Policies\RolePolicy;
+use App\Policies\UserPolicy;
+use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -16,8 +24,12 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
+        Group::class => GroupPolicy::class,
+        GroupType::class => GroupTypePolicy::class,
         Household::class => HouseholdPolicy::class,
         Member::class => MemberPolicy::class,
+        Role::class => RolePolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**
