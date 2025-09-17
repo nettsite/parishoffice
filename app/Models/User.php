@@ -62,7 +62,7 @@ class User extends Authenticatable implements CanResetPassword, FilamentUser
         return true; // Allow all users to access the panel and receive password reset emails
     }
 
-    public function ledGroups(): BelongsToMany
+    public function leadsGroups(): BelongsToMany
     {
         return $this->belongsToMany(Group::class, 'group_leaders')
                     ->withPivot(['appointed_at'])
@@ -71,15 +71,11 @@ class User extends Authenticatable implements CanResetPassword, FilamentUser
 
     public function canAccessGroup(Group $group): bool
     {
-        return $this->hasRole('Administrator') || $this->ledGroups->contains($group);
+        return $this->leadsGroups->contains($group);
     }
 
     public function hasGroupTypePermission(string $permission, Group $group): bool
     {
-        if ($this->hasRole('Administrator')) {
-            return true;
-        }
-
         if (!$this->canAccessGroup($group)) {
             return false;
         }
@@ -89,12 +85,8 @@ class User extends Authenticatable implements CanResetPassword, FilamentUser
 
     public function hasPermissionForMember(string $permission, Member $member): bool
     {
-        if ($this->hasRole('Administrator')) {
-            return true;
-        }
-
         // Check if user has this permission through any group they lead that contains this member
-        return $this->ledGroups()
+        return $this->leadsGroups()
             ->whereHas('members', fn($q) => $q->where('members.id', $member->id))
             ->whereHas('groupType.permissions', fn($q) => $q->where('name', $permission))
             ->exists();

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roles and Permissions User Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+        h4 {
+            color: #34495e;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        strong {
+            color: #2c3e50;
+        }
+        .scenario {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .principle {
+            background-color: #e8f5e8;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .toc {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            margin: 0;
+        }
+        .toc li {
+            margin-bottom: 5px;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #ecf0f1;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Roles and Permissions User Guide</h1>
+
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ol>
+            <li><a href="#what-are-roles-and-permissions">What Are Roles and Permissions?</a></li>
+            <li><a href="#how-the-system-works">How the System Works</a></li>
+            <li><a href="#types-of-permissions">Types of Permissions</a></li>
+            <li><a href="#managing-roles">Managing Roles</a></li>
+            <li><a href="#common-scenarios">Common Scenarios</a></li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <h2 id="what-are-roles-and-permissions">What Are Roles and Permissions?</h2>
+
+    <p>Think of <strong>roles</strong> like job titles in your parish that come with specific responsibilities:</p>
+
+    <ul>
+        <li><strong>Roles</strong> are like job descriptions - each role defines what someone in that position can do</li>
+        <li><strong>Permissions</strong> are the individual tasks that make up each role (like "view member information" or "update group lists")</li>
+    </ul>
+
+    <p>Just as you might hire someone as a "Catechist" (which automatically means they can teach classes, access student records, and contact families), you assign roles to system users which automatically give them all the capabilities they need for their job.</p>
+
+    <p>The system keeps this simple: <strong>you only assign roles to people</strong>. The system administrators have already set up each role with the right permissions, so you don't need to worry about the technical details.</p>
+
+    <hr>
+
+    <h2 id="how-the-system-works">How the System Works</h2>
+
+    <p>The system checks permissions every time someone tries to do something:</p>
+
+    <ol>
+        <li><strong>User attempts an action</strong> (like viewing member information)</li>
+        <li><strong>System checks</strong>: "Does this user have permission to view member information?"</li>
+        <li><strong>System allows or denies</strong> the action based on their permissions</li>
+    </ol>
+
+    <p>This happens automatically - users don't see these checks, they simply can or cannot access certain features.</p>
+
+    <hr>
+
+    <h2 id="types-of-permissions">Types of Permissions</h2>
+
+    <h3>Standard Data Management Permissions</h3>
+    <p>For each type of information (users, households, members, etc.), there are seven standard permissions:</p>
+
+    <ul>
+        <li><strong>View Any</strong>: See the list of all records</li>
+        <li><strong>View</strong>: See details of individual records</li>
+        <li><strong>Create</strong>: Add new records</li>
+        <li><strong>Update</strong>: Modify existing records</li>
+        <li><strong>Delete</strong>: Remove records (usually moves to trash)</li>
+        <li><strong>Restore</strong>: Bring back deleted records from trash</li>
+        <li><strong>Force Delete</strong>: Permanently remove records</li>
+    </ul>
+
+    <h3>Special Activity Permissions</h3>
+    <p>Some permissions control specific activities:</p>
+
+    <h4>Member Management</h4>
+    <ul>
+        <li><strong>View Groups</strong>: See which groups a member belongs to</li>
+        <li><strong>Add to Group</strong>: Put members into groups</li>
+        <li><strong>Remove from Group</strong>: Take members out of groups</li>
+    </ul>
+
+    <h4>Group Management</h4>
+    <ul>
+        <li><strong>View Members</strong>: See who belongs to a group</li>
+        <li><strong>Add Member</strong>: Put new people into the group</li>
+        <li><strong>Remove Member</strong>: Take people out of the group</li>
+    </ul>
+
+    <h4>Sacramental Records</h4>
+    <p>For each sacrament (Baptism, First Communion, Confirmation), there are specific permissions:</p>
+    <ul>
+        <li><strong>View Date</strong>: See when the sacrament was received</li>
+        <li><strong>View Parish</strong>: See where the sacrament was received</li>
+        <li><strong>View Certificate</strong>: See certificate information</li>
+        <li><strong>Download Certificate</strong>: Download certificate files</li>
+    </ul>
+
+    <hr>
+
+    <h2 id="managing-roles">Managing Roles</h2>
+
+    <h3>Assigning Roles</h3>
+    <p>When you give someone a role, they automatically receive all the permissions that come with that role. This is the only way users are given access - <strong>there are no individual permissions to manage</strong>.</p>
+
+    <h3>Available Roles</h3>
+    <p>System administrators create and manage the available roles (like "Catechist", "Group Leader", "Office Assistant"). You simply choose which existing role best fits each person's job.</p>
+
+    <h3>Multiple Roles</h3>
+    <p>A person can have multiple roles if their job spans different areas. For example, someone might be both a "Catechist" and a "Group Leader".</p>
+
+    <h3>Group Leadership</h3>
+    <p>Some users can be designated as group leaders. Group leaders automatically have certain permissions for the groups they lead, even if their role doesn't normally include those permissions.</p>
+
+    <hr>
+
+    <h2 id="common-scenarios">Common Scenarios</h2>
+
+    <div class="scenario">
+        <h3>Scenario 1: New Volunteer</h3>
+        <p><strong>Situation:</strong> A new volunteer joins and will help with children's programs.</p>
+        <p><strong>Solution:</strong> Assign them the "Catechist" role, which automatically gives them permission to:</p>
+        <ul>
+            <li>View and update member information for children in their groups</li>
+            <li>View sacramental information</li>
+            <li>Manage group membership for their assigned groups</li>
+        </ul>
+    </div>
+
+    <div class="scenario">
+        <h3>Scenario 2: Office Assistant</h3>
+        <p><strong>Situation:</strong> Someone helps in the parish office part-time and needs to enter new families.</p>
+        <p><strong>Solution:</strong> Assign them the "Office Assistant" role, which includes permissions to:</p>
+        <ul>
+            <li>Create new households and members</li>
+            <li>Update basic information</li>
+            <li>But not delete records or access sensitive information</li>
+        </ul>
+    </div>
+
+    <div class="scenario">
+        <h3>Scenario 3: Temporary Access</h3>
+        <p><strong>Situation:</strong> During preparation for First Communion, extra volunteers need to access certificates.</p>
+        <p><strong>Solution:</strong> Temporarily assign them a role that includes certificate access:</p>
+        <ul>
+            <li>Give them the "Sacrament Coordinator" role during the preparation period</li>
+            <li>Remove the role after the event is complete</li>
+        </ul>
+    </div>
+
+    <div class="scenario">
+        <h3>Scenario 4: Department Head</h3>
+        <p><strong>Situation:</strong> Someone oversees multiple programs and needs broader access.</p>
+        <p><strong>Solution:</strong> Assign them multiple roles that cover their responsibilities, such as:</p>
+        <ul>
+            <li>"Catechist" role for educational programs</li>
+            <li>"Group Leader" role for managing groups</li>
+            <li>"Sacrament Coordinator" role for sacramental records</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>Key Principles to Remember</h2>
+
+    <div class="principle">
+        <ol>
+            <li><strong>Roles Only</strong>: You only assign roles to users - the system takes care of all the detailed permissions automatically.</li>
+            <li><strong>Choose the Right Role</strong>: Select the role that best matches the person's actual job responsibilities.</li>
+            <li><strong>Multiple Roles When Needed</strong>: If someone has responsibilities that span different areas, give them multiple roles rather than trying to find one perfect role.</li>
+            <li><strong>Regular Review</strong>: Periodically review who has what roles, especially when people change positions.</li>
+            <li><strong>Remove Unused Roles</strong>: When someone's responsibilities change, remove roles they no longer need.</li>
+            <li><strong>Keep It Simple</strong>: The system is designed to be straightforward - don't overthink role assignments.</li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <h2>Getting Help</h2>
+
+    <p>If you're unsure about what role someone should have:</p>
+    <ul>
+        <li>Look at what similar people in your organization have been assigned</li>
+        <li>Consider what specific tasks they need to accomplish in their job</li>
+        <li>Start with a basic role and add additional roles as needed</li>
+        <li>Ask your system administrator if you need a new role created</li>
+    </ul>
+
+    <p>The system is designed to be flexible - you can always modify someone's roles as their responsibilities change or evolve.</p>
+</body>
+</html>
