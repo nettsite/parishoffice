@@ -92,15 +92,4 @@ class User extends Authenticatable implements CanResetPassword, FilamentUser
             ->exists();
     }
 
-    /**
-     * Override Spatie's hasPermissionTo to grant all permissions to Developer role
-     */
-    public function hasPermissionTo($permission, $guardName = null): bool
-    {
-        if ($this->hasRole('Developer')) {
-            return true;
-        }
-
-        return parent::hasPermissionTo($permission, $guardName);
-    }
 }
