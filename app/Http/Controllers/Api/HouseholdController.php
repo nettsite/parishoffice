@@ -7,6 +7,7 @@ use App\Models\Household;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class HouseholdController extends Controller
@@ -58,10 +59,23 @@ class HouseholdController extends Controller
                 'city' => 'nullable|string|max:255',
                 'province' => 'nullable|string|max:255',
                 'postal_code' => 'nullable|string|max:20',
-                'phone' => 'nullable|string|max:20',
-                'mobile' => 'nullable|string|max:20',
-                'email' => 'nullable|email|max:255',
-                'terms_accepted' => 'required|in:1',
+                'phone' => [
+                    'nullable', 
+                    'string', 
+                    'max:20',
+                    Rule::unique('households', 'phone')->ignore($household->id)],
+                'mobile' => [
+                    'nullable', 
+                    'string', 
+                    'max:20',
+                    Rule::unique('households', 'mobile')->ignore($household->id)
+                ],
+                'email' => [
+                    'nullable',
+                    'email',
+                    'max:255',
+                    Rule::unique('households', 'email')->ignore($household->id),
+                ],
             ]);
 
             $this->logActivity('Update validation passed', [

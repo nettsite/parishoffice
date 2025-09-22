@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Household;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -24,7 +24,7 @@ class HouseholdAuthController extends Controller
         $validated = $request->validate([
             'household_name' => 'required|string|max:255',
             'email' => 'required|email|unique:households,email',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|string|max:20|unique:households,phone',
             'password' => 'required|string|min:8',
             'terms_accepted' => 'required|in:1',
         ]);
@@ -150,7 +150,7 @@ class HouseholdAuthController extends Controller
         $token = Str::random(64);
         
         // Store token in password_reset_tokens table
-        \DB::table('password_reset_tokens')->updateOrInsert(
+        DB::table('password_reset_tokens')->updateOrInsert(
             ['email' => $request->email],
             [
                 'email' => $request->email,
@@ -185,7 +185,7 @@ class HouseholdAuthController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
 
-        $tokenRecord = \DB::table('password_reset_tokens')
+        $tokenRecord = DB::table('password_reset_tokens')
             ->where('email', $request->email)
             ->first();
 
@@ -198,7 +198,7 @@ class HouseholdAuthController extends Controller
 
         // Check if token is expired (60 minutes)
         if (now()->diffInMinutes($tokenRecord->created_at) > 60) {
-            \DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+            DB::table('password_reset_tokens')->where('email', $request->email)->delete();
             return response()->json([
                 'success' => false,
                 'message' => 'Reset token has expired. Please request a new one.',
@@ -219,7 +219,7 @@ class HouseholdAuthController extends Controller
         $household->save();
 
         // Delete the token
-        \DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
         Log::info('Password reset completed', [
             'household_id' => $household->id,
