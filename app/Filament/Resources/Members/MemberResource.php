@@ -26,28 +26,10 @@ class MemberResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = null;
 
-    public static function shouldRegisterNavigation(): bool
-    {
-        /** @var \App\Models\User $user */
-        $user = auth()->user();
-
-        return $user->hasRole(['Administrator', 'Group Leader', 'Catechist']);
-    }
 
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
-
-        /** @var \App\Models\User $user */
-        $user = auth()->user();
-
-        if ($user->hasRole('Administrator')) {
-            return $query;
-        }
-
-        return $query->whereHas('groups.leaders', function ($q) use ($user) {
-            $q->where('user_id', $user->id);
-        });
+        return parent::getEloquentQuery();
     }
 
     public static function form(Schema $schema): Schema

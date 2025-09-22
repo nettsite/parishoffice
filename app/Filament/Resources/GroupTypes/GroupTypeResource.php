@@ -20,13 +20,6 @@ class GroupTypeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function shouldRegisterNavigation(): bool
-    {
-        /** @var \App\Models\User $user */
-        $user = auth()->user();
-
-        return $user->hasRole('Administrator');
-    }
 
     public static function form(Schema $schema): Schema
     {

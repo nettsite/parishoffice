@@ -43,7 +43,7 @@ class UsersTable
                     ->visible(function () {
                         /** @var User $user */
                         $user = Auth::user();
-                        return $user->hasRole('Administrator');
+                        return $user->can('user.impersonate');
                     }),
             ])
             ->toolbarActions([
