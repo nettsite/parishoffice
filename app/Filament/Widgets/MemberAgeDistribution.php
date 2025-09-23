@@ -17,23 +17,32 @@ class MemberAgeDistribution extends ChartWidget
         $membersWithoutDob = Member::whereNull('date_of_birth')->count();
 
         $ageGroups = [
-            'Children (0-12)' => 0,
-            'Adolescents (13-17)' => 0,
-            'Adults (18-64)' => 0,
-            'Seniors (65+)' => 0,
+            '0-5' => 0,
+            '6-12' => 0,
+            '13-21' => 0,
+            '22-35' => 0,
+            '36-48' => 0,
+            '49-62' => 0,
+            '63+' => 0,
         ];
 
         foreach ($members as $member) {
             $age = Carbon::parse($member->date_of_birth)->age;
 
-            if ($age <= 12) {
-                $ageGroups['Children (0-12)']++;
-            } elseif ($age <= 17) {
-                $ageGroups['Adolescents (13-17)']++;
-            } elseif ($age <= 64) {
-                $ageGroups['Adults (18-64)']++;
+            if ($age <= 5) {
+                $ageGroups['0-5']++;
+            } elseif ($age <= 12) {
+                $ageGroups['6-12']++;
+            } elseif ($age <= 21) {
+                $ageGroups['13-21']++;
+            } elseif ($age <= 35) {
+                $ageGroups['22-35']++;
+            } elseif ($age <= 48) {
+                $ageGroups['36-48']++;
+            } elseif ($age <= 62) {
+                $ageGroups['49-62']++;
             } else {
-                $ageGroups['Seniors (65+)']++;
+                $ageGroups['63+']++;
             }
         }
 
