@@ -24,6 +24,7 @@ class RoleResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Settings';
 
+    // TODO: Figure out why the RolesPolicy is not being applied
     protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Schema $schema): Schema

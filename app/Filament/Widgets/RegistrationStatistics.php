@@ -16,21 +16,49 @@ class RegistrationStatistics extends StatsOverviewWidget
         $totalHouseholds = Household::count();
         $totalMembers = Member::count();
 
-        // Calculate 7-day movements
+        // Calculate time periods
+        $today = Carbon::today();
+        $yesterday = Carbon::yesterday();
         $sevenDaysAgo = Carbon::now()->subDays(7);
+
+        // Calculate household movements
+        $householdsToday = Household::whereDate('created_at', $today)->count();
+        $householdsYesterday = Household::whereDate('created_at', $yesterday)->count();
         $householdsLast7Days = Household::where('created_at', '>=', $sevenDaysAgo)->count();
+
+        // Calculate member movements
+        $membersToday = Member::whereDate('created_at', $today)->count();
+        $membersYesterday = Member::whereDate('created_at', $yesterday)->count();
         $membersLast7Days = Member::where('created_at', '>=', $sevenDaysAgo)->count();
+
+        // Build household description
+        $householdParts = [];
+        if ($householdsToday > 0) $householdParts[] = "+{$householdsToday} today";
+        if ($householdsYesterday > 0) $householdParts[] = "+{$householdsYesterday} yesterday";
+        if ($householdsLast7Days > 0) $householdParts[] = "+{$householdsLast7Days} in last 7 days";
+        $householdDescription = !empty($householdParts) ? implode(', ', $householdParts) : 'No new households recently';
+
+        // Build member description
+        $memberParts = [];
+        if ($membersToday > 0) $memberParts[] = "+{$membersToday} today";
+        if ($membersYesterday > 0) $memberParts[] = "+{$membersYesterday} yesterday";
+        if ($membersLast7Days > 0) $memberParts[] = "+{$membersLast7Days} in last 7 days";
+        $memberDescription = !empty($memberParts) ? implode(', ', $memberParts) : 'No new members recently';
+
+        // Determine colors and icons
+        $householdHasActivity = $householdsToday > 0 || $householdsYesterday > 0 || $householdsLast7Days > 0;
+        $memberHasActivity = $membersToday > 0 || $membersYesterday > 0 || $membersLast7Days > 0;
 
         return [
             Stat::make('Total Households', $totalHouseholds)
-                ->description($householdsLast7Days > 0 ? "+{$householdsLast7Days} in last 7 days" : 'No new households in last 7 days')
-                ->descriptionIcon($householdsLast7Days > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-minus')
-                ->color($householdsLast7Days > 0 ? 'success' : 'gray'),
+                ->description($householdDescription)
+                ->descriptionIcon($householdHasActivity ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-minus')
+                ->color($householdHasActivity ? 'success' : 'gray'),
 
             Stat::make('Total Members', $totalMembers)
-                ->description($membersLast7Days > 0 ? "+{$membersLast7Days} in last 7 days" : 'No new members in last 7 days')
-                ->descriptionIcon($membersLast7Days > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-minus')
-                ->color($membersLast7Days > 0 ? 'success' : 'gray'),
+                ->description($memberDescription)
+                ->descriptionIcon($memberHasActivity ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-minus')
+                ->color($memberHasActivity ? 'success' : 'gray'),
         ];
     }
 }
