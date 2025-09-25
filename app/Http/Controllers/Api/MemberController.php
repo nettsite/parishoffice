@@ -39,7 +39,7 @@ class MemberController extends Controller
             'last_name' => 'required|string|max:255',
             'id_number' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date',
-            'email' => 'nullable|email|max:255',
+            'email' => 'nullable|email|max:255|unique:members,email',
             'phone' => 'nullable|string|max:20',
             'mobile' => 'nullable|string|max:20',
             'password' => 'nullable|string|min:8',
