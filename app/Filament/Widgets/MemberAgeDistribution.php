@@ -59,10 +59,13 @@ class MemberAgeDistribution extends ChartWidget
                     'label' => 'Members',
                     'data' => array_values($filteredData),
                     'backgroundColor' => [
-                        '#10B981', // emerald-500 for Children
-                        '#3B82F6', // blue-500 for Adolescents
-                        '#8B5CF6', // violet-500 for Adults
-                        '#F59E0B', // amber-500 for Seniors
+                        '#10B981', // emerald-500 for 0-5
+                        '#06B6D4', // cyan-500 for 6-12
+                        '#3B82F6', // blue-500 for 13-21
+                        '#8B5CF6', // violet-500 for 22-35
+                        '#EC4899', // pink-500 for 36-48
+                        '#F59E0B', // amber-500 for 49-62
+                        '#EF4444', // red-500 for 63+
                         '#6B7280', // gray-500 for Unknown
                     ],
                 ],
