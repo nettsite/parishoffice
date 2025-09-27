@@ -53,6 +53,16 @@ class MemberAgeDistribution extends ChartWidget
         // Filter out zero values
         $filteredData = array_filter($ageGroups, fn($count) => $count > 0);
 
+        // Calculate total for percentage calculation
+        $total = array_sum($filteredData);
+
+        // Create labels with percentages
+        $labelsWithPercentages = [];
+        foreach ($filteredData as $ageGroup => $count) {
+            $percentage = $total > 0 ? round(($count / $total) * 100) : 0;
+            $labelsWithPercentages[] = "{$ageGroup} ({$percentage}%)";
+        }
+
         return [
             'datasets' => [
                 [
@@ -70,7 +80,7 @@ class MemberAgeDistribution extends ChartWidget
                     ],
                 ],
             ],
-            'labels' => array_keys($filteredData),
+            'labels' => $labelsWithPercentages,
         ];
     }
 
@@ -86,7 +96,7 @@ class MemberAgeDistribution extends ChartWidget
             'responsive' => true,
             'plugins' => [
                 'legend' => [
-                    'position' => 'bottom',
+                    'position' => 'left',
                 ],
             ],
         ];
