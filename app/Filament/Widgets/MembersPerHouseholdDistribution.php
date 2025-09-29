@@ -46,6 +46,16 @@ class MembersPerHouseholdDistribution extends ChartWidget
         // Filter out zero values
         $filteredData = array_filter($memberCountGroups, fn($count) => $count > 0);
 
+        // Calculate total for percentage calculation
+        $total = array_sum($filteredData);
+
+        // Create labels with percentages
+        $labelsWithPercentages = [];
+        foreach ($filteredData as $memberCountGroup => $count) {
+            $percentage = $total > 0 ? round(($count / $total) * 100) : 0;
+            $labelsWithPercentages[] = "{$memberCountGroup} ({$percentage}%)";
+        }
+
         return [
             'datasets' => [
                 [
@@ -61,7 +71,7 @@ class MembersPerHouseholdDistribution extends ChartWidget
                     ],
                 ],
             ],
-            'labels' => array_keys($filteredData),
+            'labels' => $labelsWithPercentages,
         ];
     }
 
@@ -77,7 +87,7 @@ class MembersPerHouseholdDistribution extends ChartWidget
             'responsive' => true,
             'plugins' => [
                 'legend' => [
-                    'position' => 'bottom',
+                    'position' => 'left',
                 ],
             ],
         ];
