@@ -85,6 +85,7 @@ class MembersPerHouseholdDistribution extends ChartWidget
         return [
             'maintainAspectRatio' => false,
             'responsive' => true,
+            'cutout' => '50%',
             'plugins' => [
                 'legend' => [
                     'position' => 'left',
