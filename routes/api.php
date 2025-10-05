@@ -4,9 +4,11 @@ use App\Http\Controllers\Api\Auth\HouseholdAuthController;
 use App\Http\Controllers\Api\HouseholdController;
 use App\Http\Controllers\Api\MemberCertificateController;
 use App\Http\Controllers\Api\MemberController;
+use App\Http\Controllers\Api\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
 // Authentication routes (no auth required)
+Route::post('/register', [RegistrationController::class, 'register']);
 Route::post('/household/register', [HouseholdAuthController::class, 'register']);
 Route::post('/household/login', [HouseholdAuthController::class, 'login']);
 Route::post('/household/forgot-password', [HouseholdAuthController::class, 'forgotPassword']);
