@@ -3,9 +3,12 @@
 		{
 			"path": "."
 		},
-       {
-         "path": "./wordpress-plugins/parish-portal"
-       }
+		{
+			"path": "./wordpress-plugins/parish-portal"
+		},
+		{
+			"path": "./wordpress-plugins/matthew-connector"
+		}
 	],
 	"settings": {}
 }
