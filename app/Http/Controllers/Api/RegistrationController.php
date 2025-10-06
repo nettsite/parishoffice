@@ -30,9 +30,9 @@ class RegistrationController extends Controller
         $validated = $request->validate([
             // Household fields
             'household_name' => 'required|string|max:255',
-            'household_address' => 'nullable|string|max:500',
+            'household_address' => 'nullable|string|max:255',
             'household_email' => 'nullable|email|unique:households,email',
-            'household_phone' => 'nullable|string|max:20|unique:households,phone',
+            'household_mobile' => 'nullable|string|max:20|unique:households,mobile',
 
             // Member fields
             'first_name' => 'required|string|max:255',
