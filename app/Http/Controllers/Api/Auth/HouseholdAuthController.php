@@ -14,52 +14,6 @@ use Illuminate\Validation\ValidationException;
 
 class HouseholdAuthController extends Controller
 {
-    public function register(Request $request)
-    {
-        Log::debug('Household registration attempt', [
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            $request->all(),
-        ]);
-        $validated = $request->validate([
-            'household_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:households,email',
-            'mobile' => 'required|string|max:20|unique:households,mobile',
-            'password' => 'required|string|min:8',
-            'terms_accepted' => 'required|in:1',
-        ]);
-
-        // Handle terms acceptance - convert boolean to timestamp
-        $termsAcceptedAt = $validated['terms_accepted'] ? now() : null;
-
-        $household = Household::create([
-            'name' => $validated['household_name'],
-            'mobile' => $validated['mobile'],
-            'email' => $validated['email'],
-            'password' => $validated['password'],
-            'terms_accepted' => $termsAcceptedAt,
-        ]);
-
-        Log::info('Household registered', [
-            'household_id' => $household->id,
-            'email' => $household->email,
-            'terms_accepted_at' => $termsAcceptedAt,
-            'ip' => $request->ip(),
-        ]);
-
-        // Create a token for the household
-        $token = $household->createToken('household-auth')->plainTextToken;
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Household registered successfully',
-            'data' => [
-                'household' => $household,
-                'token' => $token,
-            ],
-        ], 201);
-    }
-
     public function login(Request $request)
     {
         $validated = $request->validate([

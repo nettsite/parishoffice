@@ -60,7 +60,22 @@ class RegistrationController extends Controller
             'confirmed' => 'required|boolean',
             'confirmation_date' => 'nullable|date',
             'confirmation_parish' => 'nullable|string|max:255',
+            
+            // Terms acceptance
+            'terms_accepted' => 'required|boolean|accepted',
         ]);
+        
+        // Custom validation: Household must have at least one of email or mobile
+        if (empty($validated['household_email']) && empty($validated['household_mobile'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => [
+                    'household_email' => ['The household must have at least one of email or mobile contact.'],
+                    'household_mobile' => ['The household must have at least one of email or mobile contact.']
+                ],
+            ], 422);
+        }
 
         try {
             DB::beginTransaction();

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Route;
 
 // Authentication routes (no auth required)
 Route::post('/register', [RegistrationController::class, 'register']);
-Route::post('/household/register', [HouseholdAuthController::class, 'register']);
 Route::post('/household/login', [HouseholdAuthController::class, 'login']);
 Route::post('/household/forgot-password', [HouseholdAuthController::class, 'forgotPassword']);
 Route::post('/household/reset-password', [HouseholdAuthController::class, 'resetPassword']);
