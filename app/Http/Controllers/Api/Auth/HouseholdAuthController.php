@@ -24,7 +24,7 @@ class HouseholdAuthController extends Controller
         $validated = $request->validate([
             'household_name' => 'required|string|max:255',
             'email' => 'required|email|unique:households,email',
-            'phone' => 'required|string|max:20|unique:households,phone',
+            'mobile' => 'required|string|max:20|unique:households,mobile',
             'password' => 'required|string|min:8',
             'terms_accepted' => 'required|in:1',
         ]);
@@ -34,7 +34,7 @@ class HouseholdAuthController extends Controller
 
         $household = Household::create([
             'name' => $validated['household_name'],
-            'phone' => $validated['phone'],
+            'mobile' => $validated['mobile'],
             'email' => $validated['email'],
             'password' => $validated['password'],
             'terms_accepted' => $termsAcceptedAt,
