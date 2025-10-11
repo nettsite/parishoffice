@@ -48,6 +48,7 @@ class Household extends Model implements CanResetPassword
         'postal_code',
         'phone',
         'mobile',
+        'mobile_normalized',
         'email',
         'primary_email',
         'password',
@@ -67,6 +68,18 @@ class Household extends Model implements CanResetPassword
     {
         if (!empty($value)) {
             $this->attributes['password'] = Hash::make($value);
+        }
+    }
+
+    public function setMobileAttribute($value)
+    {
+        $this->attributes['mobile'] = $value;
+        
+        // Automatically set normalized mobile
+        if (!empty($value)) {
+            $this->attributes['mobile_normalized'] = preg_replace('/[^0-9+]/', '', $value);
+        } else {
+            $this->attributes['mobile_normalized'] = null;
         }
     }
 

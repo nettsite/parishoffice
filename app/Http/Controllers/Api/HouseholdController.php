@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Household;
+use App\Rules\UniqueMobile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -59,16 +60,11 @@ class HouseholdController extends Controller
                 'city' => 'nullable|string|max:255',
                 'province' => 'nullable|string|max:255',
                 'postal_code' => 'nullable|string|max:20',
-                'phone' => [
-                    'nullable', 
-                    'string', 
-                    'max:20',
-                    Rule::unique('households', 'phone')->ignore($household->id)],
                 'mobile' => [
                     'nullable', 
                     'string', 
                     'max:20',
-                    Rule::unique('households', 'mobile')->ignore($household->id)
+                    new UniqueMobile('households', $household->id)
                 ],
                 'email' => [
                     'nullable',

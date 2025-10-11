@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Household;
 use App\Models\Member;
+use App\Rules\UniqueMobile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -32,7 +33,7 @@ class RegistrationController extends Controller
             'household_name' => 'required|string|max:255',
             'household_address' => 'nullable|string|max:255',
             'household_email' => 'nullable|email|unique:households,email',
-            'household_mobile' => 'nullable|string|max:20|unique:households,mobile',
+            'household_mobile' => ['nullable', 'string', 'max:20', new UniqueMobile()],
 
             // Member fields
             'first_name' => 'required|string|max:255',
@@ -45,7 +46,7 @@ class RegistrationController extends Controller
             // Contact fields (can be shared between household and member)
             'email' => 'nullable|email|unique:members,email',
             'phone' => 'nullable|string|max:20',
-            'mobile' => 'nullable|string|max:20|unique:households,mobile',
+            'mobile' => ['nullable', 'string', 'max:20', new UniqueMobile()],
 
             // Authentication
             'password' => 'required|string|min:6|confirmed',

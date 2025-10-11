@@ -24,10 +24,8 @@ class HouseholdForm
                     ->default(null),
                 TextInput::make('postal_code')
                     ->default(null),
-                TextInput::make('phone')
-                    ->tel()
-                    ->default(null),
                 TextInput::make('mobile')
+                    ->tel()
                     ->default(null),
                 TextInput::make('email')
                     ->label('Email address')

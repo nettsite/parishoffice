@@ -31,8 +31,6 @@ class HouseholdsTable
                 TextColumn::make('postal_code')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
-                TextColumn::make('phone')
-                    ->searchable(),
                 TextColumn::make('mobile')
                     ->searchable(),
                 TextColumn::make('email')

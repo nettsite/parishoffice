@@ -17,7 +17,6 @@ class HouseholdInfolist
                 TextEntry::make('city'),
                 TextEntry::make('province'),
                 TextEntry::make('postal_code'),
-                TextEntry::make('phone'),
                 TextEntry::make('mobile'),
                 TextEntry::make('email')
                     ->label('Email address'),

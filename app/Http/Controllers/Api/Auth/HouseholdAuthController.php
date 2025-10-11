@@ -41,8 +41,8 @@ class HouseholdAuthController extends Controller
             // Assume it's a mobile number - normalize by removing non-numeric characters
             $normalizedMobile = preg_replace('/[^0-9+]/', '', $emailOrMobile);
             
-            // Search for household by comparing normalized mobile numbers
-            $household = Household::whereRaw('REGEXP_REPLACE(mobile, "[^0-9+]", "") = ?', [$normalizedMobile])->first();
+            // Search for household using the normalized mobile field
+            $household = Household::where('mobile_normalized', $normalizedMobile)->first();
         }
 
         if (!$household || !$household->validatePassword($validated['password'])) {
