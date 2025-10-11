@@ -17,30 +17,42 @@ class HouseholdAuthController extends Controller
     public function login(Request $request)
     {
         $validated = $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|string', // Changed from email validation to string to allow mobile numbers
             'password' => 'required|string',
         ]);
 
+        $emailOrMobile = trim($validated['email']);
+        
+        // Determine if input is email or mobile number
+        $isEmail = filter_var($emailOrMobile, FILTER_VALIDATE_EMAIL);
+        
         Log::debug('Household login attempt', [
-            'email' => $validated['email'],
+            'email_or_mobile' => $emailOrMobile,
+            'normalized_mobile' => $isEmail ? null : preg_replace('/[^0-9+]/', '', $emailOrMobile),
+            'is_email' => $isEmail,
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
 
-        $household = Household::where('email', $validated['email'])->first();
+        // Search by email or mobile based on input format
+        if ($isEmail) {
+            $household = Household::where('email', $emailOrMobile)->first();
+        } else {
+            // Assume it's a mobile number - normalize by removing non-numeric characters
+            $normalizedMobile = preg_replace('/[^0-9+]/', '', $emailOrMobile);
+            
+            // Search for household by comparing normalized mobile numbers
+            $household = Household::whereRaw('REGEXP_REPLACE(mobile, "[^0-9+]", "") = ?', [$normalizedMobile])->first();
+        }
 
         if (!$household || !$household->validatePassword($validated['password'])) {
             Log::warning('Household login failed', [
-                'email' => $validated['email'],
+                'email_or_mobile' => $emailOrMobile,
+                'normalized_mobile' => $isEmail ? null : preg_replace('/[^0-9+]/', '', $emailOrMobile),
+                'is_email' => $isEmail,
                 'ip' => $request->ip(),
             ]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Login failed',
-                'data' => [
-                    'household' => $household
-                ],
-            ]);
+            
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
@@ -131,6 +143,47 @@ class HouseholdAuthController extends Controller
         ]);
     }
 
+    public function validateResetToken(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string',
+        ]);
+
+        // Get all password reset tokens and check each one against the provided token
+        $tokenRecords = DB::table('password_reset_tokens')->get();
+        
+        $validTokenRecord = null;
+        foreach ($tokenRecords as $record) {
+            if (Hash::check($request->token, $record->token)) {
+                $validTokenRecord = $record;
+                break;
+            }
+        }
+
+        if (!$validTokenRecord) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid reset token.',
+            ], 400);
+        }
+
+        // Check if token is expired (60 minutes)
+        if (now()->diffInMinutes($validTokenRecord->created_at) > 60) {
+            DB::table('password_reset_tokens')->where('email', $validTokenRecord->email)->delete();
+            return response()->json([
+                'success' => false,
+                'message' => 'Reset token has expired. Please request a new one.',
+            ], 400);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'email' => $validTokenRecord->email,
+            ],
+        ]);
+    }
+
     public function resetPassword(Request $request)
     {
         $request->validate([
@@ -175,6 +228,9 @@ class HouseholdAuthController extends Controller
         // Delete the token
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
+        // Create authentication token for automatic login
+        $token = $household->createToken('household-auth')->plainTextToken;
+
         Log::info('Password reset completed', [
             'household_id' => $household->id,
             'email' => $household->email,
@@ -184,6 +240,10 @@ class HouseholdAuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Password has been reset successfully.',
+            'data' => [
+                'household' => $household,
+                'token' => $token,
+            ],
         ]);
     }
 }

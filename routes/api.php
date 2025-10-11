@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [RegistrationController::class, 'register']);
 Route::post('/household/login', [HouseholdAuthController::class, 'login']);
 Route::post('/household/forgot-password', [HouseholdAuthController::class, 'forgotPassword']);
+Route::post('/household/validate-reset-token', [HouseholdAuthController::class, 'validateResetToken']);
 Route::post('/household/reset-password', [HouseholdAuthController::class, 'resetPassword']);
 
 // Protected routes
