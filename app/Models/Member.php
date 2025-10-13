@@ -30,6 +30,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property bool $confirmed
  * @property \Carbon\Carbon|null $confirmation_date
  * @property string|null $confirmation_parish
+ * @property bool $married
+ * @property \Carbon\Carbon|null $marriage_date
+ * @property string|null $marriage_parish
  * @property int $household_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -52,9 +55,11 @@ class Member extends Model implements HasMedia
         'baptised' => 'boolean',
         'first_communion' => 'boolean',
         'confirmed' => 'boolean',
+        'married' => 'boolean',
         'baptism_date' => 'date',
         'first_communion_date' => 'date',
         'confirmation_date' => 'date',
+        'marriage_date' => 'date',
         'date_of_birth' => 'date',
     ];
 
@@ -88,6 +93,11 @@ class Member extends Model implements HasMedia
             ->useDisk('public');
 
         $this->addMediaCollection('confirmation_certificates')
+            ->acceptsMimeTypes(['application/pdf', 'application/octet-stream', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
+            ->singleFile()
+            ->useDisk('public');
+
+        $this->addMediaCollection('marriage_certificates')
             ->acceptsMimeTypes(['application/pdf', 'application/octet-stream', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
             ->singleFile()
             ->useDisk('public');

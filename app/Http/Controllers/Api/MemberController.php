@@ -54,6 +54,9 @@ class MemberController extends Controller
             'confirmed' => 'required|boolean',
             'confirmation_date' => 'nullable|date',
             'confirmation_parish' => 'nullable|string|max:255',
+            'married' => 'required|boolean',
+            'marriage_date' => 'nullable|date',
+            'marriage_parish' => 'nullable|string|max:255',
         ]);
 
         // Hash password if provided
@@ -117,6 +120,9 @@ class MemberController extends Controller
             'confirmed' => 'required|boolean',
             'confirmation_date' => 'nullable|date',
             'confirmation_parish' => 'nullable|string|max:255',
+            'married' => 'required|boolean',
+            'marriage_date' => 'nullable|date',
+            'marriage_parish' => 'nullable|string|max:255',
         ], [
             'email.unique' => 'This email address is in use. Leave blank if you share an email.',
         ]);

@@ -58,7 +58,7 @@ class MemberCertificateController extends Controller
     {
         try {
             // Validate certificate type
-            if (! in_array($certificateType, ['baptism', 'first_communion', 'confirmation'])) {
+            if (! in_array($certificateType, ['baptism', 'first_communion', 'confirmation', 'marriage'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid certificate type',
@@ -107,7 +107,7 @@ class MemberCertificateController extends Controller
     {
         try {
             // Validate certificate type
-            if (! in_array($certificateType, ['baptism', 'first_communion', 'confirmation'])) {
+            if (! in_array($certificateType, ['baptism', 'first_communion', 'confirmation', 'marriage'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid certificate type',
@@ -154,7 +154,7 @@ class MemberCertificateController extends Controller
     {
         try {
             // Validate certificate type
-            if (! in_array($certificateType, ['baptism', 'first_communion', 'confirmation'])) {
+            if (! in_array($certificateType, ['baptism', 'first_communion', 'confirmation', 'marriage'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid certificate type',
@@ -195,7 +195,7 @@ class MemberCertificateController extends Controller
     {
         try {
             $certificates = [];
-            $types = ['baptism', 'first_communion', 'confirmation'];
+            $types = ['baptism', 'first_communion', 'confirmation', 'marriage'];
 
             foreach ($types as $type) {
                 $collectionName = $type.'_certificates';

@@ -22,7 +22,7 @@ class UploadCertificateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'certificate_type' => 'required|in:baptism,first_communion,confirmation',
+            'certificate_type' => 'required|in:baptism,first_communion,confirmation,marriage',
             'file' => 'required|file|mimes:pdf,jpeg,jpg,png,gif,webp|max:10240', // 10MB max
         ];
     }
@@ -34,7 +34,7 @@ class UploadCertificateRequest extends FormRequest
     {
         return [
             'certificate_type.required' => 'Certificate type is required.',
-            'certificate_type.in' => 'Certificate type must be one of: baptism, first_communion, confirmation.',
+            'certificate_type.in' => 'Certificate type must be one of: baptism, first_communion, confirmation, marriage.',
             'file.required' => 'A certificate file is required.',
             'file.file' => 'The uploaded file is not valid.',
             'file.mimes' => 'The certificate must be a PDF, JPEG, JPG, PNG, GIF, or WebP file.',

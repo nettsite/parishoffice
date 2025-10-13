@@ -61,6 +61,9 @@ class RegistrationController extends Controller
             'confirmed' => 'required|boolean',
             'confirmation_date' => 'nullable|date',
             'confirmation_parish' => 'nullable|string|max:255',
+            'married' => 'required|boolean',
+            'marriage_date' => 'nullable|date',
+            'marriage_parish' => 'nullable|string|max:255',
             
             // Terms acceptance
             'terms_accepted' => 'required|boolean|accepted',
@@ -117,6 +120,9 @@ class RegistrationController extends Controller
                 'confirmed' => $validated['confirmed'],
                 'confirmation_date' => $validated['confirmation_date'] ?? null,
                 'confirmation_parish' => $validated['confirmation_parish'] ?? null,
+                'married' => $validated['married'],
+                'marriage_date' => $validated['marriage_date'] ?? null,
+                'marriage_parish' => $validated['marriage_parish'] ?? null,
             ]);
 
             Log::info('Member created during comprehensive registration', [
