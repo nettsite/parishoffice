@@ -28,7 +28,7 @@ class MembersTable
                     ->toggleable()
                     ->label('Email address')
                     ->searchable()
-                    ->url(fn ($record) => $record->email ? 'mailto:' . $record->email : null)
+                    ->url(fn ($record) => $record->email ? 'mailto:'.$record->email : null)
                     ->openUrlInNewTab(true),
                 TextColumn::make('phone')
                     ->toggleable()
@@ -61,6 +61,15 @@ class MembersTable
                     ->date()
                     ->sortable(),
                 TextColumn::make('confirmation_parish')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                IconColumn::make('married')
+                    ->boolean(),
+                TextColumn::make('marriage_date')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('marriage_parish')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('created_at')
@@ -115,6 +124,21 @@ class MembersTable
                         return match ($data['value'] ?? 'all') {
                             'confirmed' => $query->where('confirmed', true),
                             'not_confirmed' => $query->where('confirmed', false),
+                            default => $query,
+                        };
+                    }),
+                SelectFilter::make('married')
+                    ->label('Marriage Status')
+                    ->options([
+                        'all' => 'All Members',
+                        'married' => 'Married',
+                        'not_married' => 'Not Married',
+                    ])
+                    ->default('all')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return match ($data['value'] ?? 'all') {
+                            'married' => $query->where('married', true),
+                            'not_married' => $query->where('married', false),
                             default => $query,
                         };
                     }),

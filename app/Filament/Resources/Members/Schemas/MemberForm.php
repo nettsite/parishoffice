@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Members\Schemas;
 
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -123,6 +122,24 @@ class MemberForm
                         SpatieMediaLibraryFileUpload::make('confirmation_certificate')
                             ->label('Confirmation Certificate')
                             ->collection('confirmation_certificates')
+                            ->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
+                            ->maxSize(10240) // 10MB
+                            ->openable()
+                            ->previewable(false)
+                            ->panelLayout('compact'),
+                    ])
+                    ->columns(2),
+
+                Section::make('Marriage')
+                    ->schema([
+                        Toggle::make('married')
+                            ->required(),
+                        DatePicker::make('marriage_date'),
+                        TextInput::make('marriage_parish')
+                            ->default(null),
+                        SpatieMediaLibraryFileUpload::make('marriage_certificate')
+                            ->label('Marriage Certificate')
+                            ->collection('marriage_certificates')
                             ->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'])
                             ->maxSize(10240) // 10MB
                             ->openable()

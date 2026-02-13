@@ -50,7 +50,7 @@ class MemberInfolist
                             ->openUrlInNewTab(),
                     ])
                     ->columns(2)
-                    ->visible(fn($record) => auth()->user()->hasPermissionForMember('member.view.sacramental', $record)),
+                    ->visible(fn ($record) => auth()->user()->hasPermissionForMember('member.view.sacramental', $record)),
 
                 Section::make('First Communion')
                     ->schema([
@@ -74,7 +74,7 @@ class MemberInfolist
                             ->openUrlInNewTab(),
                     ])
                     ->columns(2)
-                    ->visible(fn($record) => auth()->user()->hasPermissionForMember('member.view.sacramental', $record)),
+                    ->visible(fn ($record) => auth()->user()->hasPermissionForMember('member.view.sacramental', $record)),
 
                 Section::make('Confirmation')
                     ->schema([
@@ -98,7 +98,31 @@ class MemberInfolist
                             ->openUrlInNewTab(),
                     ])
                     ->columns(2)
-                    ->visible(fn($record) => auth()->user()->hasPermissionForMember('member.view.sacramental', $record)),
+                    ->visible(fn ($record) => auth()->user()->hasPermissionForMember('member.view.sacramental', $record)),
+
+                Section::make('Marriage')
+                    ->schema([
+                        IconEntry::make('married')
+                            ->boolean(),
+                        TextEntry::make('marriage_date')
+                            ->date(),
+                        TextEntry::make('marriage_parish'),
+                        TextEntry::make('marriage_certificate')
+                            ->label('Marriage Certificate')
+                            ->getStateUsing(function ($record) {
+                                $media = $record->getFirstMedia('marriage_certificates');
+
+                                return $media ? $media->name : 'No certificate uploaded';
+                            })
+                            ->url(function ($record) {
+                                $media = $record->getFirstMedia('marriage_certificates');
+
+                                return $media ? $media->getUrl() : null;
+                            })
+                            ->openUrlInNewTab(),
+                    ])
+                    ->columns(2)
+                    ->visible(fn ($record) => auth()->user()->hasPermissionForMember('member.view.sacramental', $record)),
 
                 Section::make('Timestamps')
                     ->schema([
