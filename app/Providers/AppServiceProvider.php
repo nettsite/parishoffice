@@ -24,9 +24,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Register stable morph aliases — prevents stored class names from breaking on namespace refactors
-        Relation::enforceMorphMap([
-            'user'   => User::class,
-            'member' => Member::class,
+        // Non-enforcing morphMap() allows full class names already stored in live DB to coexist with aliases.
+        // Switch back to enforceMorphMap() after running the morph normalisation migration.
+        Relation::morphMap([
+            'user'      => User::class,
+            'member'    => Member::class,
+            'household' => \App\Models\Household::class,
         ]);
 
         // Implicitly grant "Developer" role all permissions
