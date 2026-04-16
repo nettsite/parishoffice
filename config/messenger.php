@@ -2,7 +2,7 @@
 
 // config for NettSite/Messenger
 return [
-    'user_model' => env('MESSENGER_USER_MODEL', 'App\Models\User'),
+    'user_model' => env('MESSENGER_USER_MODEL', 'App\Models\Member'),
 
     'fcm' => [
         // Path to Firebase service account JSON. Defaults to storage/app/private/fcm-credentials.json.

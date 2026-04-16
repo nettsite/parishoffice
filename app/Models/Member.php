@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use NettSite\Messenger\Contracts\MessengerAuthenticatable;
+use NettSite\Messenger\Traits\HasMessenger;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -40,10 +42,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read Household $household
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Group> $groups
  */
-class Member extends Model implements HasMedia
+class Member extends Authenticatable implements HasMedia, MessengerAuthenticatable
 {
     /** @use HasFactory<\Database\Factories\MemberFactory> */
-    use HasApiTokens, HasFactory, InteractsWithMedia;
+    use HasApiTokens, HasFactory, HasMessenger, InteractsWithMedia;
 
     protected $guarded = [];
 
@@ -52,15 +54,16 @@ class Member extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'baptised' => 'boolean',
-        'first_communion' => 'boolean',
-        'confirmed' => 'boolean',
-        'married' => 'boolean',
-        'baptism_date' => 'date',
+        'password'             => 'hashed',
+        'baptised'             => 'boolean',
+        'first_communion'      => 'boolean',
+        'confirmed'            => 'boolean',
+        'married'              => 'boolean',
+        'baptism_date'         => 'date',
         'first_communion_date' => 'date',
-        'confirmation_date' => 'date',
-        'marriage_date' => 'date',
-        'date_of_birth' => 'date',
+        'confirmation_date'    => 'date',
+        'marriage_date'        => 'date',
+        'date_of_birth'        => 'date',
     ];
 
     public function household(): BelongsTo
@@ -68,11 +71,14 @@ class Member extends Model implements HasMedia
         return $this->belongsTo(Household::class);
     }
 
-    public function groups(): BelongsToMany
+    /**
+     * Override HasMessenger::groups() to resolve App\Models\Group (not the base messenger model)
+     * so that the full parish group with metadata is returned.
+     * Satisfies MessengerAuthenticatable::groups(): MorphToMany.
+     */
+    public function groups(): MorphToMany
     {
-        return $this->belongsToMany(Group::class, 'group_member')
-                    ->withPivot(['joined_at', 'is_active'])
-                    ->withTimestamps();
+        return $this->morphToMany(Group::class, 'user', 'messenger_group_users');
     }
 
     public function getFullNameAttribute(): string

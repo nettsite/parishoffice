@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\Groups\Schemas;
 
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Toggle;
+use App\Models\GroupType;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class GroupForm
@@ -22,9 +23,8 @@ class GroupForm
                             ->maxLength(255),
 
                         Select::make('group_type_id')
-                            ->relationship('groupType', 'name')
+                            ->options(fn() => GroupType::where('is_active', true)->pluck('name', 'id'))
                             ->searchable()
-                            ->preload()
                             ->label('Type'),
 
                         Textarea::make('description')
