@@ -4429,12 +4429,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nettsite/messenger-api.git",
-                "reference": "24b9165eddfe614f27870930e45da2be0dd65ae1"
+                "reference": "10c1054271d3eb3247771d47eafeff95b4f8a35c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nettsite/messenger-api/zipball/24b9165eddfe614f27870930e45da2be0dd65ae1",
-                "reference": "24b9165eddfe614f27870930e45da2be0dd65ae1",
+                "url": "https://api.github.com/repos/nettsite/messenger-api/zipball/10c1054271d3eb3247771d47eafeff95b4f8a35c",
+                "reference": "10c1054271d3eb3247771d47eafeff95b4f8a35c",
                 "shasum": ""
             },
             "require": {
@@ -4530,7 +4530,7 @@
                     "url": "https://github.com/nettsite"
                 }
             ],
-            "time": "2026-04-16T10:22:15+00:00"
+            "time": "2026-04-16T15:03:37+00:00"
         },
         {
             "name": "nikic/php-parser",
