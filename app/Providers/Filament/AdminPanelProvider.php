@@ -19,6 +19,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
+use NettSite\Messenger\Filament\MessengerPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -31,6 +32,8 @@ class AdminPanelProvider extends PanelProvider
             ->domain(config('matthew.domain', 'http://localhost'))
             ->login()
             ->passwordReset()
+
+            ->plugin(MessengerPlugin::make())
 
             ->colors([
                 'primary' => Color::Gray,
