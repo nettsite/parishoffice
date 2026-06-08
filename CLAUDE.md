@@ -16,15 +16,36 @@ Matthew is a Laravel 12.x parish management system with household-centric data o
 
 ### Key Models & Relationships
 - `Household` — contains multiple members, authenticates via API (Sanctum). Login accepts email **or** mobile number; mobile is normalised (non-numerics stripped) via a model mutator and the `UniqueMobile` validation rule.
-- `Member` — belongs to a household, carries sacrament dates/flags and certificate media
-- `Group` — members belong to groups via `group_member` pivot (with `joined_at`). Users are group leaders via `group_leaders` pivot (with `appointed_at`).
+- `Member` — belongs to a household, carries sacrament dates/flags and certificate media. Also extends `Authenticatable`, implements `MessengerAuthenticatable` and uses `HasMessenger` — **parishioners are the messenger app users** (they log in, receive, and send messages). Has `HasApiTokens`, hashed `password` cast.
+- `Group` — **extends `NettSite\Messenger\Models\Group`**, backed by the vendor's `messenger_groups` table (UUID PK). Parish groups and messenger groups are unified — there is no parallel structure. Matthew-only fields (`description`, `group_type_id`, `is_active`) live in a separate `group_details` extension table (see below) so vendor tables stay untouched and upgrade-safe.
+- `GroupDetail` — extension model for `group_details`, keyed by `group_id` (string/UUID), holds `description`, `group_type_id`, `is_active`
 - `GroupType` — categorises groups; holds Spatie permissions that define what leaders of that type can do
-- `User` — separate admin users for Filament panel access; has `HasMessenger` trait
+- `User` — separate admin users for Filament panel access only; **no longer participates in messenger** (no `HasMessenger`). Has `HasApiTokens` (required because the messenger `AuthController` calls `createToken()`).
+
+### Group Model Internals (Member Unification)
+`App\Models\Group` proxies the three `group_details` columns transparently:
+- `setAttribute()`/`getAttribute()` intercept `description`, `group_type_id`, `is_active` and route them through the `detail` relation instead of `messenger_groups` columns
+- A `static::saved()` hook persists buffered `detailData` via `updateOrCreate`, and ensures every group gets a `group_details` row (defaulting `is_active = true`)
+- `groupType()` is a `hasOneThrough` chained via `group_details` (messenger_groups.id → group_details.group_id → group_details.group_type_id → group_types.id) — **not** a direct relation, because `GroupType` isn't reachable straight from the vendor table
+- `members()` aliases the vendor `users()` morph-to-many (delivery, via `messenger_group_users`); `memberDetails()` is the Matthew-metadata pivot (`group_member`, with `joined_at`/`is_active`); `leaders()` is the admin-leader pivot (`group_leaders`, with `appointed_at`)
+- `enrolMember()` writes to **both** `messenger_group_users` (so the member receives messages) and `group_member` (Matthew membership metadata) — use it instead of raw pivot syncs when adding members to groups
+- The form's `group_type_id` select must use `->options()`, not `->relationship()` — `relationship()` is incompatible with `HasOneThrough`
 
 ### Permission System
 - Spatie Permissions for role-based access
 - `AppServiceProvider` uses `Gate::before()` to implicitly grant all permissions to the **Developer** role — `can()` checks always pass for this role without explicit permission assignments
 - GroupType-scoped permissions: a group leader's abilities are determined by the permissions attached to the group's `GroupType`, checked via `MemberPolicy`
+
+### Morph Map
+`AppServiceProvider::boot()` registers a **non-enforcing** `Relation::morphMap()` (not `enforceMorphMap()`):
+```php
+Relation::morphMap([
+    'user'      => User::class,
+    'member'    => Member::class,
+    'household' => \App\Models\Household::class,
+]);
+```
+Non-enforcing allows short aliases to coexist with full class names already stored on a live database (e.g. existing `model_has_roles` rows with `App\Models\User`). Switching to `enforceMorphMap()` requires a data migration to normalise existing morph columns first — see `docs/deployment-messenger-groups-migration.md`.
 
 ### API Structure
 Routes in `routes/api.php`:
@@ -36,10 +57,10 @@ Routes in `routes/api.php`:
 
 ### Messenger API
 Installed via `nettsite/messenger-api` (custom VCS package, `dev-main`):
-- `User` model uses `HasMessenger` trait (`NettSite\Messenger\Traits\HasMessenger`)
-- `MessengerPlugin::make()` registered in `AdminPanelProvider`
+- `Member` model uses `HasMessenger` trait (`NettSite\Messenger\Traits\HasMessenger`) and implements `MessengerAuthenticatable` — **parishioners**, not admin `User`s, are the messenger participants (`config/messenger.php` sets `user_model` to `App\Models\Member`)
+- `App\Filament\AppMessengerPlugin` (thin subclass of `MessengerPlugin`, registered in `AdminPanelProvider`) registers only `MessageResource` and skips the vendor `GroupResource` — group management uses Matthew's own `GroupResource` operating on `App\Models\Group`
 - FCM push notifications configured in `config/messenger.php` (credentials JSON path + project ID)
-- 10 database migrations create messenger tables (enrollments, device tokens, groups, messages, conversations, receipts)
+- Database migrations create messenger tables (enrollments, device tokens, `messenger_groups`, `messenger_group_users`, messages, conversations, receipts); `App\Models\Group` extends the vendor `Group` model on `messenger_groups` rather than maintaining a separate groups table
 
 ## Development Commands
 
@@ -152,10 +173,9 @@ All media uses `public` disk. Accepted formats: PDF, JPEG, PNG, GIF, WebP (max 1
 
 ## Model Relationships Summary
 
-- `Household` hasMany `Member`
-- `Member` belongsTo `Household`, implements `HasMedia`
-- `Member` belongsToMany `Group` (pivot: `group_member`, stores `joined_at`)
-- `Group` belongsToMany `User` as leaders (pivot: `group_leaders`, stores `appointed_at`)
-- `Group` belongsTo `GroupType`
-- `GroupType` hasMany `Group`, hasPermissions via Spatie
-- `Household` implements `CanResetPassword`
+- `Household` hasMany `Member`, implements `CanResetPassword`
+- `Member` belongsTo `Household`, implements `HasMedia` and `MessengerAuthenticatable`
+- `Member` morphToMany `Group` (via `messenger_group_users`, messenger delivery — overrides `HasMessenger::groups()` to resolve `App\Models\Group`)
+- `Group` extends vendor `MessengerGroup` (table `messenger_groups`); hasOne `GroupDetail`; belongsToMany `Member` as `memberDetails` (pivot `group_member`: `joined_at`, `is_active`) and `User` as `leaders` (pivot `group_leaders`: `appointed_at`); hasOneThrough `GroupType` via `GroupDetail`
+- `GroupDetail` belongsTo `GroupType`
+- `GroupType` hasMany `Group` (via `group_details`), hasPermissions via Spatie
