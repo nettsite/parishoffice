@@ -48,17 +48,11 @@ class AppServiceProvider extends ServiceProvider
             'household' => \App\Models\Household::class,
         ]);
 
-        // TEMPORARY: grant every authenticated user all permissions — production users were
-        // locked out because the do-everything permission/grants from the recent migrations
-        // hadn't been applied there yet. Revert to the hasPermissionTo() check below once
-        // `php artisan migrate` has run on production and access is confirmed working.
-        Gate::before(fn ($user) => $user ? true : null);
-
         // Implicitly grant super-admins all permissions. Checked via hasPermissionTo() (not can())
         // because Gate::before() intercepts every can() call — calling can() here would recurse.
-        // Gate::before(function ($user) {
-        //     return $user->hasPermissionTo(self::SUPER_ADMIN_PERMISSION) ? true : null;
-        // });
+        Gate::before(function ($user) {
+            return $user->hasPermissionTo(self::SUPER_ADMIN_PERMISSION) ? true : null;
+        });
 
         $this->protectSuperAdminPermissionAndRole();
     }
