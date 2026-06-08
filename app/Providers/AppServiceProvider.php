@@ -20,9 +20,11 @@ class AppServiceProvider extends ServiceProvider
     public const SUPER_ADMIN_PERMISSION = 'do-everything';
 
     /**
-     * Role that the do-everything permission is attached to. Protected from deletion below.
+     * Roles the do-everything permission is attached to. Protected from deletion/rename below.
+     * "Administrator" is the production super-admin role; "Developer" predates it and is kept
+     * for the existing NettSite developer account.
      */
-    public const SUPER_ADMIN_ROLE = 'Developer';
+    public const SUPER_ADMIN_ROLES = ['Administrator', 'Developer'];
 
     /**
      * Register any application services.
@@ -74,14 +76,16 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Role::deleting(function (Role $role) {
-            if ($role->name === self::SUPER_ADMIN_ROLE) {
-                throw new RuntimeException('The "'.self::SUPER_ADMIN_ROLE.'" role cannot be deleted.');
+            if (in_array($role->name, self::SUPER_ADMIN_ROLES, true)) {
+                throw new RuntimeException('The "'.$role->name.'" role cannot be deleted.');
             }
         });
 
         Role::updating(function (Role $role) {
-            if ($role->getOriginal('name') === self::SUPER_ADMIN_ROLE && $role->isDirty('name')) {
-                throw new RuntimeException('The "'.self::SUPER_ADMIN_ROLE.'" role cannot be renamed.');
+            $original = $role->getOriginal('name');
+
+            if ($role->isDirty('name') && in_array($original, self::SUPER_ADMIN_ROLES, true)) {
+                throw new RuntimeException('The "'.$original.'" role cannot be renamed.');
             }
         });
     }
