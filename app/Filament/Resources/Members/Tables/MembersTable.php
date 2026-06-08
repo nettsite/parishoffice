@@ -36,6 +36,12 @@ class MembersTable
                 TextColumn::make('mobile')
                     ->toggleable()
                     ->searchable(),
+                TextColumn::make('occupation')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                TextColumn::make('skills')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
                 IconColumn::make('baptised')
                     ->boolean(),
                 TextColumn::make('baptism_date')
